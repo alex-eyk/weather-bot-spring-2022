@@ -1,6 +1,6 @@
-package com.alex.eyk.bot.weather.telegram.xml.impl
+package com.alex.eyk.bot.weather.core.xml.impl
 
-import com.alex.eyk.bot.weather.telegram.xml.AbstractXmlParser
+import com.alex.eyk.bot.weather.core.xml.AbstractXmlParser
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 

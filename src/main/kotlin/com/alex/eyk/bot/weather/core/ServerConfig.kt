@@ -1,4 +1,4 @@
-package com.alex.eyk.bot.weather.telegram
+package com.alex.eyk.bot.weather.core
 
 /*
     TODO: get data from properties file

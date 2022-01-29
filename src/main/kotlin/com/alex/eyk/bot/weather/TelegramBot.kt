@@ -1,5 +1,6 @@
-package com.alex.eyk.bot.weather.telegram
+package com.alex.eyk.bot.weather
 
+import com.alex.eyk.bot.weather.core.ServerConfig
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service

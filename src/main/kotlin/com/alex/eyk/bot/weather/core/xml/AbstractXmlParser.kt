@@ -1,6 +1,6 @@
-package com.alex.eyk.bot.weather.telegram.xml
+package com.alex.eyk.bot.weather.core.xml
 
-import com.alex.eyk.bot.weather.telegram.xml.exception.MalformedXmlException
+import com.alex.eyk.bot.weather.core.xml.exception.MalformedXmlException
 import org.xml.sax.SAXException
 import org.xml.sax.helpers.DefaultHandler
 import java.io.IOException

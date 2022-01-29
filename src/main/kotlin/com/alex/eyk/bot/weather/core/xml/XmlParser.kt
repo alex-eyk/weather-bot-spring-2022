@@ -1,4 +1,4 @@
-package com.alex.eyk.bot.weather.telegram.xml
+package com.alex.eyk.bot.weather.core.xml
 
 import java.io.InputStream
 
