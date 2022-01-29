@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "telegram.token",
+      "type": "java.lang.String",
+      "description": "Token of telegram bot."
+    },
+    {
+      "name": "telegram.bot_name",
+      "type": "java.lang.String",
+      "description": "Name of telegram bot."
+    }
+  ]
+}
