@@ -4,6 +4,6 @@ import java.io.InputStream
 
 interface XmlParser<T> {
 
-    fun parse(xmlStream: InputStream): T
+    fun parse(inputStream: InputStream): T
 
 }
