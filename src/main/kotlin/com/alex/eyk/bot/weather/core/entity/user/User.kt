@@ -1,5 +1,6 @@
 package com.alex.eyk.bot.weather.core.entity.user
 
+import com.alex.eyk.bot.weather.core.entity.Activity
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -12,6 +13,9 @@ data class User(
     var chat: Long,
 
     @Column(name = "`enabled`", nullable = false)
-    var enabled: Boolean
+    var enabled: Boolean,
+
+    @Column(name = "`activity`", nullable = false)
+    var activity: Activity
 
 )
