@@ -1,69 +1,105 @@
 package com.alex.eyk.bot.weather.core.xml.impl
 
+import com.alex.eyk.bot.weather.core.entity.reply.Reply
 import com.alex.eyk.bot.weather.core.xml.AbstractXmlParser
+import com.alex.eyk.bot.weather.core.xml.impl.ReplyAttributes.getFormat
+import com.alex.eyk.bot.weather.core.xml.impl.ReplyAttributes.getKey
+import com.alex.eyk.bot.weather.core.xml.impl.ReplyAttributes.getMarkdown
+import org.springframework.stereotype.Service
 import org.xml.sax.Attributes
-import org.xml.sax.SAXException
 
-class ReplyXmlParser : AbstractXmlParser<Map<String, String>>() {
+@Service
+class ReplyXmlParser : AbstractXmlParser<Map<String, Reply>>() {
 
-    override fun createSaxEventHandler(): AbstractSaxEventHandler<Map<String, String>> = ReplyMessageSaxEventHandler()
+    override fun createSaxEventHandler(): AbstractSaxEventHandler<Map<String, Reply>> = ReplyMessageSaxEventHandler()
 
-    internal class ReplyMessageSaxEventHandler : AbstractSaxEventHandler<Map<String, String>>() {
+    internal class ReplyMessageSaxEventHandler : AbstractSaxEventHandler<Map<String, Reply>>() {
 
-        private lateinit var keyToMessageMap: MutableMap<String, String>
+        private lateinit var repliesMap: MutableMap<String, Reply>
 
-        /**
-         * Текущий ключ для получения сообщения. Может быть равен null в случае, если в данный момент времени не
-         * рассматривается необходимый элемент `reply`
-         */
         private var key: String? = null
-
-        /**
-         * Текущее сообщение для ключа. Может быть равен null в случае, если в данный момент времени не
-         * рассматривается необходимый элемент `reply`
-         */
-        private var value: String? = null
+        private var content: String? = null
+        private var format: Boolean = false
+        private var markdown: Boolean = false
 
         override fun startDocument() {
-            this.keyToMessageMap = HashMap()
+            this.repliesMap = HashMap()
         }
 
         override fun startElement(
             uri: String?, localName: String?, qName: String, attributes: Attributes
         ) {
             if (qName == "reply") {
-                val key = attributes.getValue("key")
-                if (key != null) {
-                    this.key = key
-                } else {
-                    throw SAXException("No value for param 'key'")
-                }
+                this.key = attributes.getKey()
+                this.format = attributes.getFormat(format)
+                this.markdown = attributes.getMarkdown(markdown)
             }
         }
 
         override fun characters(ch: CharArray, start: Int, length: Int) {
             if (this.key != null) {
                 val read = String(ch, start, length)
-                if (this.value != null) {
-                    this.value += read
+                if (this.content != null) {
+                    this.content += read
                 } else {
-                    this.value = read
+                    this.content = read
                 }
             }
         }
 
         override fun endElement(uri: String?, localName: String?, qName: String) {
             if (qName == "reply") {
-                if (this.key != null && this.value != null) {
-                    keyToMessageMap[this.key!!] = this.value!!
+                if (this.key != null && this.content != null) {
+                    repliesMap[this.key!!] = Reply(this.content!!, format, markdown)
                 }
                 this.key = null
-                this.value = null
+                this.content = null
+                this.format = false
+                this.markdown = false
             }
         }
 
         override fun endDocument() {
-            super.setResult(keyToMessageMap)
+            super.setResult(repliesMap)
+        }
+    }
+
+}
+
+object ReplyAttributes {
+
+    private const val ATTR_KEY = "key"
+    private const val ATTR_FORMAT = "format"
+    private const val ATTR_MARKDOWN = "markdown"
+
+    fun Attributes.getKey(): String {
+        val key = this.getValue(ATTR_KEY)
+        if (key != null) {
+            return key
+        } else {
+            throw IllegalStateException("Attribute `key` should be define for all replies")
+        }
+    }
+
+    fun Attributes.getFormat(default: Boolean): Boolean {
+        val format = this.getValue(ATTR_FORMAT) ?: return default
+        try {
+            return format.toBooleanStrict()
+        } catch (e: IllegalArgumentException) {
+            throw IllegalStateException(
+                "Illegal value for param `format` (available only `true` or `false`)"
+            )
+        }
+    }
+
+    fun Attributes.getMarkdown(default: Boolean): Boolean {
+        val markdown = this.getValue(ATTR_MARKDOWN) ?: return default
+        try {
+            return markdown.toBooleanStrict()
+        } catch (e: IllegalArgumentException) {
+            throw IllegalStateException(
+                "Illegal value for param `markdown` (available only `true` or `false`)"
+            )
         }
     }
 

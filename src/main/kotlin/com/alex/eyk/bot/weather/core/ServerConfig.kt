@@ -1,10 +1,12 @@
 package com.alex.eyk.bot.weather.core
 
-/*
-    TODO: get data from properties file
- */
+import com.ximand.properties.PropertiesPath
+import com.ximand.properties.Property
+
+@PropertiesPath("jarpath:/app.properties")
 class ServerConfig {
 
-    val threads = 4
+    @Property(name = "server.threads", defaultValue = "4")
+    var threads = 4
 
 }

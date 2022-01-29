@@ -1,4 +1,4 @@
-package com.alex.eyk.bot.weather.core.entity
+package com.alex.eyk.bot.weather.core.entity.user
 
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.Optional

@@ -1,4 +1,4 @@
-package com.alex.eyk.bot.weather.core.entity
+package com.alex.eyk.bot.weather.core.entity.user
 
 import javax.persistence.Column
 import javax.persistence.Entity
