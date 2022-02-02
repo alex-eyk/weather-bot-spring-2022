@@ -13,7 +13,7 @@ abstract class AbstractHandler<T : java.io.Serializable>(
 
     abstract fun handle(user: User, message: Message): BotApiMethod<T>
 
-    inner class RunnableBuilder {
+    inner class TaskBuilder {
 
         private lateinit var user: User
         private lateinit var message: Message
