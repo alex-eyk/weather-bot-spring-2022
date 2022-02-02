@@ -1,6 +1,7 @@
 package com.alex.eyk.bot.weather.core
 
 import com.alex.eyk.bot.weather.core.config.ServerProperties
+import com.alex.eyk.bot.weather.core.entity.user.User
 import com.alex.eyk.bot.weather.core.entity.user.UserRepository
 import com.alex.eyk.bot.weather.core.handler.HandlerProvider
 import org.slf4j.LoggerFactory
@@ -37,43 +38,31 @@ class TelegramBot @Autowired constructor(
     override fun getBotUsername(): String = username
 
     override fun onUpdateReceived(update: Update) {
-        userRepository.findByChat(update.message.chatId)
-            .ifPresent { user ->
-                if (user.enabled == false) {
-                    return@ifPresent
+        var user = userRepository.getByChat(update.message.chatId)
+        if (user == null) {
+            user = userRepository.save(User(update.message.chatId))
+        }
+        val handler = handlerProvider.getHandler(user, update.message)
+        val task = handler.TaskBuilder()
+            .user(user)
+            .message(update.message)
+            .onResult {
+                executeAsyncMethod(it) { method, e ->
+                    logger.error("Unable to execute api method: $method", e)
                 }
-                val handler = handlerProvider.getHandler(user, update.message)
-                val task = handler.TaskBuilder()
-                    .user(user)
-                    .message(update.message)
-                    .onResult {
-                        executeAsync(it, object : ExceptionCallback {
-                            override fun onApiException(method: BotApiMethod<*>, e: TelegramApiRequestException) {
-                                logger.error(
-                                    "API Exception during execute async api method: $method, " +
-                                            "message: ${update.message}",
-                                    e
-                                )
-                            }
-
-                            override fun onException(method: BotApiMethod<*>, e: Exception) {
-                                logger.error("Exception during execute async api method", e)
-                            }
-                        })
-                    }
-                    .onError {
-
-                    }
-                    .build()
-                executorService.submit(task)
             }
+            .onError {
+                logger.error(
+                    "Server side exception - unable to handle message: ${update.message}", it
+                )
+            }
+            .build()
+        executorService.submit(task)
     }
 
-    override fun <T : Serializable, Method : BotApiMethod<T>> execute(method: Method): T = super.execute(method)
-
-    fun <T : Serializable, Method : BotApiMethod<T>> executeAsync(
-        method: Method,
-        callback: ExceptionCallback
+    fun <T : Serializable> executeAsyncMethod(
+        method: BotApiMethod<T>,
+        onError: (BotApiMethod<*>, Throwable) -> Unit
     ) {
         super.executeAsync(method, object : SentCallback<T> {
 
@@ -81,20 +70,13 @@ class TelegramBot @Autowired constructor(
             }
 
             override fun onError(method: BotApiMethod<T>, apiException: TelegramApiRequestException) {
-                callback.onApiException(method, apiException)
+                onError.invoke(method, apiException)
             }
 
             override fun onException(method: BotApiMethod<T>, exception: java.lang.Exception) {
-                callback.onException(method, exception)
+                onError.invoke(method, exception)
             }
         })
     }
-}
-
-interface ExceptionCallback {
-
-    fun onApiException(method: BotApiMethod<*>, e: TelegramApiRequestException)
-
-    fun onException(method: BotApiMethod<*>, e: Exception)
 
 }

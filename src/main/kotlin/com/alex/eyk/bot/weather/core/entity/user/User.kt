@@ -13,9 +13,9 @@ data class User(
     var chat: Long,
 
     @Column(name = "`enabled`", nullable = false)
-    var enabled: Boolean,
+    var enabled: Boolean = true,
 
     @Column(name = "`activity`", nullable = false)
-    var activity: Activity
+    var activity: Activity = Activity.NONE
 
 )
