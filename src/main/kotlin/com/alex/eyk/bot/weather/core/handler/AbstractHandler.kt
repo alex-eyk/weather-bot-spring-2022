@@ -1,23 +1,26 @@
 package com.alex.eyk.bot.weather.core.handler
 
-import com.alex.eyk.bot.weather.core.entity.reply.ReplyProvider
 import com.alex.eyk.bot.weather.core.entity.user.User
-import com.alex.eyk.bot.weather.core.entity.user.UserRepository
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.objects.Message
 
-abstract class AbstractHandler<T : java.io.Serializable>(
-    protected val replyProvider: ReplyProvider,
-    protected val userRepository: UserRepository
-) {
+abstract class AbstractHandler {
 
-    abstract fun handle(user: User, message: Message): BotApiMethod<T>
+    fun handle(user: User, message: Message): BotApiMethod<*> {
+        if (user.enabled) {
+            return saveHandle(user, message)
+        } else {
+            throw IllegalStateException("User: ${user.chat} was disabled")
+        }
+    }
+
+    abstract fun saveHandle(user: User, message: Message): BotApiMethod<*>
 
     inner class TaskBuilder {
 
         private lateinit var user: User
         private lateinit var message: Message
-        private lateinit var onResult: (BotApiMethod<T>) -> Unit
+        private lateinit var onResult: (BotApiMethod<*>) -> Unit
         private lateinit var onError: (Throwable) -> Unit
 
         fun user(user: User) = apply { this.user = user }

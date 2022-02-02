@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service
 import java.io.IOException
 
 @Service
-class XmlReplyProvider @Autowired constructor(xmlRepliesParser: ReplyXmlParser) : ReplyProvider {
-
-    @Value("\${replies.path}")
-    private lateinit var repliesPath: String
+class XmlReplyProvider @Autowired constructor(
+    @Value("\${replies.path}") repliesPath: String,
+    xmlRepliesParser: ReplyXmlParser
+) : ReplyProvider {
 
     private val replies: Map<String, Reply>
 

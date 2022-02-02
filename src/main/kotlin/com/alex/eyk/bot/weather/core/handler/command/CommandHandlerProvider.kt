@@ -5,19 +5,19 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class CommandHandlerProvider @Autowired constructor(handlers: List<CommandHandler<*>>) {
+class CommandHandlerProvider @Autowired constructor(handlers: List<CommandHandler>) {
 
-    private val commandHandlers: Map<String, CommandHandler<*>>
+    private val commandHandlers: Map<String, CommandHandler>
 
     init {
-        val commandHandlers = HashMap<String, CommandHandler<*>>()
+        val commandHandlers = HashMap<String, CommandHandler>()
         for (handler in handlers) {
             commandHandlers[handler.command] = handler
         }
         this.commandHandlers = Collections.unmodifiableMap(commandHandlers)
     }
 
-    fun byCommand(command: String): CommandHandler<*> {
+    fun byCommand(command: String): CommandHandler {
         return commandHandlers[command] ?: throw IllegalStateException("No handler for command: $command")
     }
 

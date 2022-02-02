@@ -13,7 +13,7 @@ class HandlerProvider @Inject constructor(
     private val commandHandlerProvider: CommandHandlerProvider
 ) {
 
-    fun getHandler(user: User, message: Message): AbstractHandler<*> {
+    fun getHandler(user: User, message: Message): AbstractHandler {
         return if (isCommand(message)) {
             val command = message.text.substring(1)
             commandHandlerProvider.byCommand(command)
