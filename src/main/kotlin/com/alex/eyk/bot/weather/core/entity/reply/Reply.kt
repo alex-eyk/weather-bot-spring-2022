@@ -1,5 +1,8 @@
 package com.alex.eyk.bot.weather.core.entity.reply
 
+import com.alex.eyk.bot.weather.core.processor.ReplyEntity
+
+@ReplyEntity
 data class Reply(
     val content: String,
     val format: Boolean,

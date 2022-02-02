@@ -4,6 +4,7 @@ plugins {
     id("org.springframework.boot") version "2.6.3"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.6.10"
+    kotlin("kapt") version "1.6.10"
     kotlin("plugin.spring") version "1.6.10"
     kotlin("plugin.jpa") version "1.6.10"
 }
@@ -19,11 +20,20 @@ repositories {
 dependencies {
     implementation(fileTree("libs"))
 
+
+    implementation("com.squareup:kotlinpoet:1.10.2")
+    implementation("com.google.auto.service:auto-service:1.0.1")
+    kapt("com.google.auto.service:auto-service:1.0.1")
+
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.telegram:telegrambots-spring-boot-starter:5.2.0")
+    implementation("org.telegram:telegrambots-spring-boot-starter:5.4.0.1")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    kapt("com.alex.eyk:weather-bot-spring-2022:0.0.1-SNAPSHOT")
+
     runtimeOnly("mysql:mysql-connector-java")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
