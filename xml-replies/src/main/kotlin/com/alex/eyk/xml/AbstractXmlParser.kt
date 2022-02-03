@@ -1,6 +1,6 @@
-package com.alex.eyk.bot.processor.xml
+package com.alex.eyk.xml
 
-import com.alex.eyk.bot.processor.xml.exception.MalformedXmlException
+import com.alex.eyk.xml.exception.MalformedXmlException
 import org.xml.sax.SAXException
 import org.xml.sax.helpers.DefaultHandler
 import java.io.IOException

@@ -1,8 +1,8 @@
 @file:Suppress("unused")
 
-package com.alex.eyk.bot.processor
+package com.alex.eyk.processor
 
-import com.alex.eyk.bot.processor.xml.impl.KeysParser
+import com.alex.eyk.xml.impl.KeysParser
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
@@ -25,7 +25,7 @@ class RepliesProcessor : AbstractProcessor() {
         .createInstance(ProcessorProperties::class.java)
 
     override fun getSupportedAnnotationTypes(): MutableSet<String> {
-        return mutableSetOf(ReplyEntity::class.java.name)
+        return mutableSetOf(RepliesProvider::class.java.name)
     }
 
     override fun getSupportedSourceVersion(): SourceVersion {
@@ -39,7 +39,7 @@ class RepliesProcessor : AbstractProcessor() {
         FileInputStream(properties.repliesAbsolutePath).use {
             val keys = KeysParser().parse(it)
             val keysObjectSpec = generateObjectForKeys(keys)
-            val annotatedElements = roundEnv.getElementsAnnotatedWith(ReplyEntity::class.java)
+            val annotatedElements = roundEnv.getElementsAnnotatedWith(RepliesProvider::class.java)
             if (annotatedElements.isEmpty()) {
                 return false
             } else if (annotatedElements.size > 1) {

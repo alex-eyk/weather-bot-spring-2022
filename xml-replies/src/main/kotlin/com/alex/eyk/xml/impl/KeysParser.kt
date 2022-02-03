@@ -1,7 +1,6 @@
-package com.alex.eyk.bot.processor.xml.impl
+package com.alex.eyk.xml.impl
 
-import com.alex.eyk.bot.processor.xml.AbstractXmlParser
-import com.alex.eyk.bot.processor.xml.impl.AttributesExt.getKey
+import com.alex.eyk.xml.AbstractXmlParser
 import org.xml.sax.Attributes
 
 class KeysParser : AbstractXmlParser<Set<String>>() {
@@ -43,18 +42,4 @@ class KeysParser : AbstractXmlParser<Set<String>>() {
         }
     }
 
-}
-
-object AttributesExt {
-
-    private const val ATTR_KEY = "key"
-
-    fun Attributes.getKey(): String {
-        val key = this.getValue(ATTR_KEY)
-        if (key != null) {
-            return key
-        } else {
-            throw IllegalStateException("Attribute `key` should be define for all replies")
-        }
-    }
 }

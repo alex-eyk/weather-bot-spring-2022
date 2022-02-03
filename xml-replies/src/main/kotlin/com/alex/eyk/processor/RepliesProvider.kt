@@ -1,5 +1,5 @@
-package com.alex.eyk.bot.processor
+package com.alex.eyk.processor
 
 @Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.CLASS)
-annotation class ReplyEntity
+annotation class RepliesProvider

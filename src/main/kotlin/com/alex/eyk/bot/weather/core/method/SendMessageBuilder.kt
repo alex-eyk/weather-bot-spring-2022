@@ -2,7 +2,7 @@
 
 package com.alex.eyk.bot.weather.core.method
 
-import com.alex.eyk.bot.weather.core.entity.reply.Reply
+import com.alex.eyk.entity.Reply
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 
 class SendMessageBuilder {
