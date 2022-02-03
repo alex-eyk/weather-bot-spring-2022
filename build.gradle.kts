@@ -31,8 +31,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation(project(":replies-processor"))
-    kapt(project(":replies-processor"))
+    implementation(project(":xml-replies"))
+    kapt(project(":xml-replies"))
 
     runtimeOnly("mysql:mysql-connector-java")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

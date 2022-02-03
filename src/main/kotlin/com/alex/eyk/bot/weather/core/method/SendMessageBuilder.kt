@@ -12,7 +12,7 @@ class SendMessageBuilder {
     private var markdown: Boolean = false
 
     fun chat(chat: Long) = apply {
-        builder.chatId(chat.toString())
+        this.builder.chatId(chat.toString())
     }
 
     fun reply(reply: Reply): SendMessageBuilder {
