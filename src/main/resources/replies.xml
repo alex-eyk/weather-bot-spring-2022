@@ -20,7 +20,6 @@
 Символ прерывания строки — &#10;
 -->
 <replies>
-    <reply key="reply1">Ответ без параметров и форматирования</reply>
+    <reply key="start">Добро пожаловать!</reply>
     <reply key="reply2" format="true">Параметр: %s</reply>
-    <reply key="reply2" markdown="true">*Курсивный текст*</reply>
 </replies>

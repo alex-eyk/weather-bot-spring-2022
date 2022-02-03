@@ -1,9 +1,12 @@
 package com.alex.eyk.bot.weather.app
 
+import com.alex.eyk.bot.weather.core.entity.reply.Replies
 import com.alex.eyk.bot.weather.core.entity.reply.ReplyProvider
 import com.alex.eyk.bot.weather.core.entity.user.User
 import com.alex.eyk.bot.weather.core.handler.command.CommandHandler
+import com.alex.eyk.bot.weather.core.method.build
 import com.alex.eyk.bot.weather.core.method.chat
+import com.alex.eyk.bot.weather.core.method.reply
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
@@ -20,8 +23,8 @@ class StartHandler @Autowired constructor(
     override fun saveHandle(user: User, message: Message): BotApiMethod<*> {
         return SendMessage.builder()
             .chat(user.chat)
-            .text("Welcome!")
-            .build()
+            .reply(replyProvider.of(Replies.START))
+            .build(true)
     }
 
 }

@@ -50,6 +50,12 @@ class ReplyXmlParser : AbstractXmlParser<Map<String, Reply>>() {
         override fun endElement(uri: String?, localName: String?, qName: String) {
             if (qName == "reply") {
                 if (this.key != null && this.content != null) {
+                    if (this.repliesMap.contains(this.key)) {
+                        throw IllegalStateException(
+                            "Each key should be uniq. Replies xml file contains more " +
+                                    "than one reply whit key: $key"
+                        )
+                    }
                     repliesMap[this.key!!] = Reply(this.content!!, format, markdown)
                 }
                 this.key = null

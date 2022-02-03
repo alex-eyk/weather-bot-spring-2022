@@ -33,7 +33,7 @@ class XmlReplyProvider @Autowired constructor(
         }
     }
 
-    override fun getReply(key: String): Reply {
+    override fun of(key: String): Reply {
         return replies[key] ?: throw IllegalArgumentException("No reply for key: $key")
     }
 

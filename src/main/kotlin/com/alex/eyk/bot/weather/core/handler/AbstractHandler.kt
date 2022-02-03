@@ -16,7 +16,11 @@ abstract class AbstractHandler {
 
     abstract fun saveHandle(user: User, message: Message): BotApiMethod<*>
 
-    inner class TaskBuilder {
+    fun buildTask(): TaskBuilder {
+        return TaskBuilder()
+    }
+
+    inner class TaskBuilder internal constructor() {
 
         private lateinit var user: User
         private lateinit var message: Message

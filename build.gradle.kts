@@ -15,15 +15,14 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
-    implementation(fileTree("libs"))
-
+    implementation("com.ximand:properties-provider:1.0.2")
 
     implementation("com.squareup:kotlinpoet:1.10.2")
     implementation("com.google.auto.service:auto-service:1.0.1")
-    kapt("com.google.auto.service:auto-service:1.0.1")
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.telegram:telegrambots-spring-boot-starter:5.4.0.1")
@@ -32,7 +31,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    kapt("com.alex.eyk:weather-bot-spring-2022:0.0.1-SNAPSHOT")
+    implementation(project(":replies-processor"))
+    kapt(project(":replies-processor"))
 
     runtimeOnly("mysql:mysql-connector-java")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

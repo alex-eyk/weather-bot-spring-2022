@@ -1,6 +1,6 @@
 package com.alex.eyk.bot.weather.core.entity.reply
 
-import com.alex.eyk.bot.weather.core.processor.ReplyEntity
+import com.alex.eyk.bot.processor.ReplyEntity
 
 @ReplyEntity
 data class Reply(
