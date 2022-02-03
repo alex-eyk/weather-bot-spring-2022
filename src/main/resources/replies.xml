@@ -21,5 +21,4 @@
 -->
 <replies>
     <reply key="start">Добро пожаловать!</reply>
-    <reply key="reply2" format="true">Параметр: %s</reply>
 </replies>

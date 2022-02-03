@@ -1,16 +1,15 @@
 package com.alex.eyk.bot.weather.core.entity.reply.impl
 
+import com.alex.eyk.bot.weather.core.entity.reply.ReplyProvider
 import com.alex.eyk.entity.Reply
 import com.alex.eyk.xml.impl.ReplyXmlParser
-import com.alex.eyk.bot.weather.core.entity.reply.ReplyProvider
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.io.IOException
 
 const val REPLIES_PATH = "replies.xml"
 
 @Service
-class XmlReplyProvider @Autowired constructor() : ReplyProvider {
+class XmlReplyProvider : ReplyProvider {
 
     private val replies: Map<String, Reply>
 

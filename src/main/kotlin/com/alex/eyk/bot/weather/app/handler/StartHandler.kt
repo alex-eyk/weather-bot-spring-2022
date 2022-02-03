@@ -1,4 +1,4 @@
-package com.alex.eyk.bot.weather.app
+package com.alex.eyk.bot.weather.app.handler
 
 import com.alex.eyk.bot.weather.core.entity.reply.Replies
 import com.alex.eyk.bot.weather.core.entity.reply.ReplyProvider
