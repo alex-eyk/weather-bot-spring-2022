@@ -20,9 +20,8 @@ repositories {
 
 dependencies {
     implementation("com.ximand:properties-provider:1.0.2")
-
-    implementation("com.squareup:kotlinpoet:1.10.2")
-    implementation("com.google.auto.service:auto-service:1.0.1")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.3.0")
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.telegram:telegrambots-spring-boot-starter:5.4.0.1")
