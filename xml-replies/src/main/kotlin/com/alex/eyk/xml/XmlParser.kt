@@ -1,9 +1,9 @@
 package com.alex.eyk.xml
 
-import java.io.InputStream
+import java.io.File
 
 interface XmlParser<T> {
 
-    fun parse(inputStream: InputStream): T
+    fun parse(file: File): T
 
 }

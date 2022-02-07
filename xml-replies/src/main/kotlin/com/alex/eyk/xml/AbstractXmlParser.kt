@@ -3,19 +3,19 @@ package com.alex.eyk.xml
 import com.alex.eyk.xml.exception.MalformedXmlException
 import org.xml.sax.SAXException
 import org.xml.sax.helpers.DefaultHandler
+import java.io.File
 import java.io.IOException
-import java.io.InputStream
 import javax.xml.parsers.ParserConfigurationException
 import javax.xml.parsers.SAXParserFactory
 
 abstract class AbstractXmlParser<T> : XmlParser<T> {
 
-    override fun parse(inputStream: InputStream): T {
+    override fun parse(file: File): T {
         val saxParser = SAXParserFactory.newInstance()
             .newSAXParser()
         val saxEventHandler = createSaxEventHandler()
         try {
-            saxParser.parse(inputStream, saxEventHandler)
+            saxParser.parse(file, saxEventHandler)
             return saxEventHandler.requireResult()
         } catch (e: ParserConfigurationException) {
             throw IllegalStateException("Exception with parser configurator while parsing xml", e)
