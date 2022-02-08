@@ -1,7 +1,6 @@
 package com.alex.eyk.bot.weather.app.handler
 
-import com.alex.eyk.bot.weather.core.entity.reply.Replies
-import com.alex.eyk.bot.weather.core.entity.reply.ReplyProvider
+import com.alex.eyk.bot.weather.core.entity.reply.DictionaryProvider
 import com.alex.eyk.bot.weather.core.entity.user.User
 import com.alex.eyk.bot.weather.core.handler.command.CommandHandler
 import com.alex.eyk.bot.weather.core.method.SendMessageBuilder
@@ -14,13 +13,13 @@ private const val COMMAND = "start"
 
 @Service
 class StartHandler @Autowired constructor(
-    private val replyProvider: ReplyProvider
+    private val dictProvider: DictionaryProvider
 ) : CommandHandler(COMMAND) {
 
     override fun saveHandle(user: User, message: Message): SendMessage {
         return SendMessageBuilder()
             .chat(user.chat)
-            .reply(replyProvider.of(Replies.START))
+            //.reply(dictProvider.reply(Replies.START))
             .build()
     }
 
