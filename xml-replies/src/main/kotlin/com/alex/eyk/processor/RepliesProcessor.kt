@@ -2,7 +2,8 @@
 
 package com.alex.eyk.processor
 
-import com.alex.eyk.xml.impl.KeysParser
+import com.alex.eyk.dictionary.Dictionary
+import com.alex.eyk.xml.impl.DictionaryParser
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
@@ -35,16 +36,9 @@ class RepliesProcessor : AbstractProcessor() {
         annotations: MutableSet<out TypeElement>,
         roundEnv: RoundEnvironment
     ): Boolean {
-        val directory = File(properties.dictionariesDirectoryPath)
-        val innerFiles = directory.listFiles()
-            ?: throw IllegalStateException(
-                "No one dictionary file found, path: ${properties.dictionariesDirectoryPath}"
-            )
-        val keys = KeysParser().parse(getFirstNotXsdFile(innerFiles))
-        val specs = listOf(
-            generateObjectForKeys(properties.generatedReplyFilename, keys.first),
-            generateObjectForKeys(properties.generatedWordFilename, keys.second)
-        )
+        val dictionaryFiles = getAllDictionaryFiles()
+        val defaultDictionary = getDefaultDictionary(dictionaryFiles)
+        val specs = generateSpecs(defaultDictionary)
         val annotatedElements = roundEnv.getElementsAnnotatedWith(DictionaryProvider::class.java)
         if (annotatedElements.isEmpty()) {
             return false
@@ -60,14 +54,32 @@ class RepliesProcessor : AbstractProcessor() {
         return true
     }
 
-    private fun getFirstNotXsdFile(files: Array<File>): File {
-        for (file in files) {
-            if (file.name.endsWith(".xsd")) {
-                continue
+    private fun getAllDictionaryFiles(): Array<File> {
+        val directory = File(properties.dictionariesDirectoryPath)
+        return directory.listFiles()
+            ?: throw IllegalStateException(
+                "No one dictionary file found, path: ${properties.dictionariesDirectoryPath}"
+            )
+    }
+
+    private fun getDefaultDictionary(dictionaryFiles: Array<File>): Dictionary {
+        var defaultDictionary: Dictionary? = null
+        for (file in dictionaryFiles) {
+            if (file.name.endsWith(".xsd") == false) {
+                val dictionary = DictionaryParser().parse(file)
+                if (dictionary.default) {
+                    defaultDictionary = dictionary
+                }
             }
-            return file
         }
-        throw IllegalStateException("Directory not contains any .xml file")
+        return defaultDictionary ?: throw IllegalStateException("Unable to found default dictionary")
+    }
+
+    private fun generateSpecs(dictionary: Dictionary): Set<TypeSpec> {
+        return setOf(
+            generateObjectForKeys(properties.generatedReplyFilename, dictionary.replies.keys),
+            generateObjectForKeys(properties.generatedWordFilename, dictionary.words.keys)
+        )
     }
 
     private fun generateObjectForKeys(name: String, keys: Set<String>): TypeSpec {

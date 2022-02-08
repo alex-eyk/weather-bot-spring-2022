@@ -1,7 +1,7 @@
 package com.alex.eyk.xml.impl
 
-import com.alex.eyk.entity.Dictionary
-import com.alex.eyk.entity.Reply
+import com.alex.eyk.dictionary.Dictionary
+import com.alex.eyk.dictionary.Reply
 import com.alex.eyk.xml.AbstractXmlParser
 import org.xml.sax.Attributes
 import java.io.File

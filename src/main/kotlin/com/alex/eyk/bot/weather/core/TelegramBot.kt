@@ -1,7 +1,6 @@
 package com.alex.eyk.bot.weather.core
 
 import com.alex.eyk.bot.weather.core.config.ServerProperties
-import com.alex.eyk.bot.weather.core.entity.user.User
 import com.alex.eyk.bot.weather.core.entity.user.UserRepository
 import com.alex.eyk.bot.weather.core.handler.HandlerProvider
 import org.slf4j.LoggerFactory
@@ -38,10 +37,7 @@ class TelegramBot @Autowired constructor(
     override fun getBotUsername(): String = username
 
     override fun onUpdateReceived(update: Update) {
-        var user = userRepository.getByChat(update.message.chatId)
-        if (user == null) {
-            user = userRepository.save(User(update.message.chatId))
-        }
+        val user = userRepository.getByChat(update.message.chatId)
         val handler = handlerProvider.getHandler(user, update.message)
         val task = handler.TaskBuilder()
             .user(user)

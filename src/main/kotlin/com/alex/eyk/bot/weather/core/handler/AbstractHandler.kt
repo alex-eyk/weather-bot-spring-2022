@@ -6,7 +6,10 @@ import org.telegram.telegrambots.meta.api.objects.Message
 
 abstract class AbstractHandler {
 
-    fun handle(user: User, message: Message): BotApiMethod<*> {
+    fun handle(user: User?, message: Message): BotApiMethod<*> {
+        if (user == null) {
+            return notRegisteredHandle(message)
+        }
         if (user.enabled) {
             return saveHandle(user, message)
         } else {
@@ -14,7 +17,13 @@ abstract class AbstractHandler {
         }
     }
 
-    abstract fun saveHandle(user: User, message: Message): BotApiMethod<*>
+    protected open fun saveHandle(user: User, message: Message): BotApiMethod<*> {
+        throw NotImplementedError()
+    }
+
+    protected open fun notRegisteredHandle(message: Message): BotApiMethod<*> {
+        throw NotImplementedError()
+    }
 
     fun buildTask(): TaskBuilder {
         return TaskBuilder()
@@ -22,12 +31,13 @@ abstract class AbstractHandler {
 
     inner class TaskBuilder internal constructor() {
 
-        private lateinit var user: User
+        private var user: User? = null
+
         private lateinit var message: Message
         private lateinit var onResult: (BotApiMethod<*>) -> Unit
         private lateinit var onError: (Throwable) -> Unit
 
-        fun user(user: User) = apply { this.user = user }
+        fun user(user: User?) = apply { this.user = user }
 
         fun message(message: Message) = apply { this.message = message }
 

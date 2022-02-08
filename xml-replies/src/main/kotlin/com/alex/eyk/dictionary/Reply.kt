@@ -1,4 +1,4 @@
-package com.alex.eyk.entity
+package com.alex.eyk.dictionary
 
 data class Reply(
     val content: String,

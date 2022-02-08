@@ -1,4 +1,4 @@
-package com.alex.eyk.entity
+package com.alex.eyk.dictionary
 
 data class Dictionary(
     val code: String,

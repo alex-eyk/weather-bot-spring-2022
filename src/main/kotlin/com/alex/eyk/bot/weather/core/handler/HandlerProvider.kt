@@ -16,8 +16,14 @@ class HandlerProvider @Inject constructor(
     private val conditionMessageHandlerProvider: ConditionMessageHandlerProvider
 ) {
 
-    fun getHandler(user: User, message: Message): AbstractHandler {
-        return if (isCommand(message)) {
+    fun getHandler(user: User?, message: Message): AbstractHandler {
+        return if (user == null) {
+            if (message.text == "/start") {
+                return commandHandlerProvider.byCommand("start")
+            } else {
+                throw IllegalStateException("User: ${message.chatId} not save in database")
+            }
+        } else if (isCommand(message)) {
             val command = message.text.substring(1)
             commandHandlerProvider.byCommand(command)
         } else if (user.activity != Activity.NONE) {
