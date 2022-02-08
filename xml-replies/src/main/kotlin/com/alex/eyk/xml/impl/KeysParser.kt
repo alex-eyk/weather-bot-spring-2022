@@ -3,42 +3,47 @@ package com.alex.eyk.xml.impl
 import com.alex.eyk.xml.AbstractXmlParser
 import org.xml.sax.Attributes
 
-class KeysParser : AbstractXmlParser<Set<String>>() {
+class KeysParser : AbstractXmlParser<Pair<Set<String>, Set<String>>>() {
 
-    override fun createSaxEventHandler(): AbstractSaxEventHandler<Set<String>> = ReplyMessageSaxEventHandler()
+    override fun createSaxEventHandler(): AbstractSaxEventHandler<Pair<Set<String>, Set<String>>> =
+        ReplyMessageSaxEventHandler()
 
-    internal class ReplyMessageSaxEventHandler : AbstractSaxEventHandler<Set<String>>() {
+    internal class ReplyMessageSaxEventHandler : AbstractSaxEventHandler<Pair<Set<String>, Set<String>>>() {
 
-        private lateinit var keys: MutableSet<String>
+        private lateinit var replyKeys: MutableSet<String>
+        private lateinit var wordKeys: MutableSet<String>
 
         private var key: String? = null
 
         override fun startDocument() {
-            this.keys = HashSet()
+            this.replyKeys = HashSet()
+            this.wordKeys = HashSet()
         }
 
         override fun startElement(
             uri: String?, localName: String?, qName: String, attributes: Attributes
         ) {
-            if (qName == "reply") {
+            if (qName == "reply" || qName == "word") {
                 this.key = attributes.getKey()
             }
-        }
-
-        override fun characters(ch: CharArray, start: Int, length: Int) {
         }
 
         override fun endElement(uri: String?, localName: String?, qName: String) {
             if (qName == "reply") {
                 if (this.key != null) {
-                    this.keys.add(this.key!!)
+                    this.replyKeys.add(this.key!!)
+                }
+                this.key = null
+            } else if (qName == "word") {
+                if (this.key != null) {
+                    this.wordKeys.add(this.key!!)
                 }
                 this.key = null
             }
         }
 
         override fun endDocument() {
-            super.setResult(keys)
+            super.setResult(Pair(replyKeys, wordKeys))
         }
     }
 

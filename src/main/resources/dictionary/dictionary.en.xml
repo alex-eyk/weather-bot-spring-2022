@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="dictionary-schema.xsd"
+        language_local_name="English"
+        default="false">
+
+    <replies>
+        <reply key="start">Welcome!</reply>
+        <reply key="i" format="true">1. %d devices</reply>
+    </replies>
+
+    <words>
+        <word key="word">word</word>
+        <word key="word_with_cases">word</word>
+        <word key="two_word_with_cases">smart words</word>
+    </words>
+
+</dictionary>

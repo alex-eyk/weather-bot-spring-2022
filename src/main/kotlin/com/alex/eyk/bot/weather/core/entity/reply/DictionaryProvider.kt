@@ -1,9 +1,9 @@
 package com.alex.eyk.bot.weather.core.entity.reply
 
 import com.alex.eyk.entity.Reply
-import com.alex.eyk.processor.RepliesProvider
+import com.alex.eyk.processor.DictionaryProvider
 
-@RepliesProvider
+@DictionaryProvider
 interface DictionaryProvider {
 
     @Deprecated("Use of(lang, key) instead")

@@ -6,10 +6,13 @@ import com.ximand.properties.Property
 @PropertiesPath("res:/replies-processor.properties")
 class ProcessorProperties {
 
-    @Property(name = "replies.absolute_path", defaultValue = "")
-    lateinit var repliesAbsolutePath: String
+    @Property(name = "dictionary.directory_path", defaultValue = "")
+    lateinit var dictionariesDirectoryPath: String
 
-    @Property(name = "generated.file_name", defaultValue = "Replies")
-    lateinit var generatedFileName: String
+    @Property(name = "generated.replies.filename", defaultValue = "Replies")
+    lateinit var generatedReplyFilename: String
+
+    @Property(name = "generated.words.filename", defaultValue = "Words")
+    lateinit var generatedWordFilename: String
 
 }
