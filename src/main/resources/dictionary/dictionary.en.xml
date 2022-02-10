@@ -44,8 +44,8 @@ It must contain two elements - `replies` and `words`.
         All replies must be defined for each language used.
         For new line the character is used: `&#10`;
         -->
-        <reply key="start">Добро пожаловать!</reply>
-        <reply key="start_first_time">Добро пожаловать!</reply>
+        <reply key="start">Welcome!</reply>
+        <reply key="start_first_time">Welcome!</reply>
     </replies>
 
     <!--
@@ -64,7 +64,7 @@ It must contain two elements - `replies` and `words`.
         All words must be defined for each language used.
         For new line the character is used: `&#10`;
         -->
-        <word key="word">слово</word>
+        <word key="word">word</word>
     </words>
 
 </dictionary>
