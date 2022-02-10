@@ -1,6 +1,7 @@
 package com.alex.eyk.dictionary.provider
 
 import com.alex.eyk.dictionary.Dictionary
+import com.alex.eyk.dictionary.Language
 import com.alex.eyk.dictionary.Reply
 import com.alex.eyk.dictionary.exception.NoSuchLanguageException
 import com.alex.eyk.dictionary.exception.NoSuchReplyException
@@ -11,24 +12,38 @@ import java.io.File
 abstract class AbstractDictionaryProvider(dictionaryFiles: Set<File>) : DictionaryProvider {
 
     private val dictionaries: Map<String, Dictionary>
-    private var defaultCode: String? = null
+    private val languages: List<Language>
+
+    private lateinit var defaultLanguage: Language
 
     init {
         val mutableDictionaries = HashMap<String, Dictionary>()
+        val mutableLanguages = ArrayList<Language>()
         for (file in dictionaryFiles) {
             val dictionary = DictionaryParser().parse(file)
             if (dictionary.default) {
-                if (defaultCode != null) {
+                if (::defaultLanguage.isInitialized) {
                     throw IllegalStateException("More than one dictionary marked as default")
                 }
-                this.defaultCode = dictionary.code
+                this.defaultLanguage = dictionary.language
             }
-            mutableDictionaries[dictionary.code] = dictionary
+            mutableLanguages.add(dictionary.language)
+            mutableDictionaries[dictionary.language.code] = dictionary
         }
+        this.languages = mutableLanguages
         this.dictionaries = mutableDictionaries
-        if (defaultCode == null) {
+
+        if (::defaultLanguage.isInitialized == false) {
             throw IllegalStateException("No one default dictionary found")
         }
+    }
+
+    override fun getLanguages(): List<Language> {
+        return languages
+    }
+
+    override fun getDefaultLanguageCode(): String {
+        return defaultLanguage.code
     }
 
     override fun reply(lang: String, key: String): Reply {
@@ -39,9 +54,5 @@ abstract class AbstractDictionaryProvider(dictionaryFiles: Set<File>) : Dictiona
     override fun word(lang: String, key: String): String {
         val dictionary = dictionaries[lang] ?: throw NoSuchLanguageException()
         return dictionary.words[key] ?: throw NoSuchWordException()
-    }
-
-    override fun getDefaultLanguageCode(): String {
-        return defaultCode!!
     }
 }

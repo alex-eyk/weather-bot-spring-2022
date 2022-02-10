@@ -1,5 +1,6 @@
 package com.alex.eyk.dictionary.provider
 
+import com.alex.eyk.dictionary.Language
 import com.alex.eyk.dictionary.Reply
 
 interface DictionaryProvider {
@@ -9,5 +10,7 @@ interface DictionaryProvider {
     fun reply(lang: String, key: String): Reply
 
     fun getDefaultLanguageCode(): String
+
+    fun getLanguages(): List<Language>
 
 }

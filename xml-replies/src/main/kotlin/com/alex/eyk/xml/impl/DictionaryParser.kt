@@ -1,6 +1,7 @@
 package com.alex.eyk.xml.impl
 
 import com.alex.eyk.dictionary.Dictionary
+import com.alex.eyk.dictionary.Language
 import com.alex.eyk.dictionary.Reply
 import com.alex.eyk.xml.AbstractXmlParser
 import org.xml.sax.Attributes
@@ -81,7 +82,7 @@ class DictionaryParser : AbstractXmlParser<Dictionary>() {
                         throw IllegalStateException("Language local name should be define in dictionary file")
                     }
                     this.dictionary = Dictionary(
-                        languageCode, languageLocalName!!, defaultLanguage, replies, words
+                        Language(languageCode, languageLocalName!!), defaultLanguage, replies, words
                     )
                 }
                 "reply" -> {
