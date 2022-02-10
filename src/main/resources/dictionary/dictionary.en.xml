@@ -1,19 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+The filename is "dictionary.en.xml", where "en" is language code.
+
+dictionary — root element
+Contains the following attributes:
+  default           — Indicates whether this language will be used by default. If true, then each user will receive
+                      a message in this language after registration.
+                      Boolean value. Required attribute.
+
+  languageLocalName — Local language name in the corresponding language (example: `English` for code "en")
+                      String value. Required attribute.
+
+It must contain two elements - `replies` and `words`.
+-->
 <dictionary
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="dictionary-schema.xsd"
         language_local_name="English"
         default="false">
 
+    <!--
     <replies>
-        <reply key="start">Welcome!</reply>
-        <reply key="i" format="true">1. %d devices</reply>
+    The element contains replies, which can be somehow changed in the code before being sent to the user.
+    Replies are written in the following format:
+      <reply key="Key" format="false">Content of reply</reply>
+
+    Each reply can have the following attributes::
+      key      - The value by which the reply can be accessed later. Must be in lower case, words must be separated by
+                 underscores (example: `service_unavailable`).
+                 String value. Required attribute.
+
+      format   - Does the content require formatting, i.e. Does it need to be supplemented with some additional
+                 parameters. It is implemented in the code via String.format, so the same rules are used in this
+                 document: %s is a string, %d is a number, and so on...
+                 Boolean value. Optional attribute, default value is false.
+
+      markdown — Whether the string was written using the Markdown language for further formatting.
+                 https://core.telegram.org/api/entities (markdown - most recent examples)
+                 Boolean value. Optional attribute, default value is false.
+    -->
+    <replies>
+        <!--
+        All replies must be defined for each language used.
+        For new line the character is used: `&#10`;
+        -->
+        <reply key="start">Добро пожаловать!</reply>
+        <reply key="start_first_time">Добро пожаловать!</reply>
     </replies>
 
+    <!--
     <words>
-        <word key="word">word</word>
-        <word key="word_with_cases">word</word>
-        <word key="two_word_with_cases">smart words</word>
+    The element contains words or small phrases inside. Contrary to the replies, `words` must not be changed in the
+    code (except the case). Words can be used as part of a `reply`.
+    Example. We need to display the current weather condition in the following format:
+      <reply key="weather_state" format="true">Now is %s</reply>
+    The weather state can be, for example, either `snow` or `rain`. Then we can prepare the appropriate words in
+    advance:
+      <word key="snow">snow</word>
+      <word key="rain">rain</word>.
+    -->
+    <words>
+        <!--
+        All words must be defined for each language used.
+        For new line the character is used: `&#10`;
+        -->
+        <word key="word">слово</word>
     </words>
 
 </dictionary>
