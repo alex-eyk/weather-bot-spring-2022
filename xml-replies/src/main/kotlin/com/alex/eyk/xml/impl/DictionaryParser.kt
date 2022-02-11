@@ -3,6 +3,7 @@ package com.alex.eyk.xml.impl
 import com.alex.eyk.dictionary.Dictionary
 import com.alex.eyk.dictionary.Language
 import com.alex.eyk.dictionary.Reply
+import com.alex.eyk.dictionary.Word
 import com.alex.eyk.xml.AbstractXmlParser
 import org.xml.sax.Attributes
 import java.io.File
@@ -12,6 +13,7 @@ private val FILENAME_PATTERN = "dictionary\\.[a-z]+\\.xml".toRegex()
 private const val USE_CASES_DEFAULT = false
 private const val FORMAT_DEFAULT = false
 private const val MARKDOWN_DEFAULT = false
+private const val TRANSLATABLE_DEFAULT = true
 
 class DictionaryParser : AbstractXmlParser<Dictionary>() {
 
@@ -22,18 +24,24 @@ class DictionaryParser : AbstractXmlParser<Dictionary>() {
     override fun parse(file: File): Dictionary {
         val filename = file.name
         if (filename.matches(FILENAME_PATTERN) == false) {
-            throw IllegalStateException("Illegal file name: `$filename`. Right name: `dictionary.lang-code-here.xml`")
+            throw IllegalStateException(
+                "Illegal file name: `$filename`. Right name: `dictionary.lang-code-here.xml`"
+            )
         }
-        this.languageCode = filename.substring(filename.indexOf(".") + 1, filename.lastIndexOf("."))
+        this.languageCode = filename.substring(
+            filename.indexOf(".") + 1, filename.lastIndexOf(".")
+        )
         return super.parse(file)
     }
 
-    internal class DictionarySaxEventHandler(private val languageCode: String) : AbstractSaxEventHandler<Dictionary>() {
+    internal class DictionarySaxEventHandler(
+        private val languageCode: String
+    ) : AbstractSaxEventHandler<Dictionary>() {
 
         private lateinit var dictionary: Dictionary
 
         private val replies: MutableMap<String, Reply> = HashMap()
-        private val words: MutableMap<String, String> = HashMap()
+        private val words: MutableMap<String, Word> = HashMap()
 
         private var languageLocalName: String? = null
         private var defaultLanguage: Boolean = false
@@ -43,6 +51,8 @@ class DictionaryParser : AbstractXmlParser<Dictionary>() {
         private var content: String? = null
         private var format: Boolean = FORMAT_DEFAULT
         private var markdown: Boolean = MARKDOWN_DEFAULT
+
+        private var translatable: Boolean = TRANSLATABLE_DEFAULT
 
         override fun startElement(
             uri: String?, localName: String?, qName: String, attributes: Attributes
@@ -60,6 +70,7 @@ class DictionaryParser : AbstractXmlParser<Dictionary>() {
                 }
                 "word" -> {
                     this.key = attributes.getKey()
+                    this.translatable = attributes.isTranslatable(default = translatable)
                 }
             }
         }
@@ -78,11 +89,16 @@ class DictionaryParser : AbstractXmlParser<Dictionary>() {
         override fun endElement(uri: String?, localName: String?, qName: String) {
             when (qName) {
                 "dictionary" -> {
-                    if (languageLocalName == null) {
-                        throw IllegalStateException("Language local name should be define in dictionary file")
+                    if (this.languageLocalName == null) {
+                        throw IllegalStateException(
+                            "Language local name should be define in dictionary file"
+                        )
                     }
                     this.dictionary = Dictionary(
-                        Language(languageCode, languageLocalName!!), defaultLanguage, replies, words
+                        Language(this.languageCode, this.languageLocalName!!),
+                        this.defaultLanguage,
+                        this.replies,
+                        this.words
                     )
                 }
                 "reply" -> {
@@ -94,8 +110,9 @@ class DictionaryParser : AbstractXmlParser<Dictionary>() {
                 }
                 "word" -> {
                     if (this.key != null && this.content != null) {
-                        words[this.key!!] = this.content!!
+                        words[this.key!!] = Word(this.content!!, this.translatable)
                     }
+                    this.translatable = TRANSLATABLE_DEFAULT
                 }
             }
             this.key = null

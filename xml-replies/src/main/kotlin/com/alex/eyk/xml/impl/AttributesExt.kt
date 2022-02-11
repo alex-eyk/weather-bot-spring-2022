@@ -11,6 +11,8 @@ private const val ATTR_KEY = "key"
 private const val ATTR_FORMAT = "format"
 private const val ATTR_MARKDOWN = "markdown"
 
+private const val ATTR_TRANSLATABLE = "translatable"
+
 fun Attributes.getLanguageLocalName(): String {
     return getString(ATTR_LOCAL_NAME)
 }
@@ -33,6 +35,10 @@ fun Attributes.getMarkdown(default: Boolean): Boolean {
 
 fun Attributes.isDefaultLanguage(default: Boolean): Boolean {
     return getBoolean(ATTR_DEFAULT, default)
+}
+
+fun Attributes.isTranslatable(default: Boolean): Boolean {
+    return getBoolean(ATTR_TRANSLATABLE, default)
 }
 
 private fun Attributes.getBoolean(key: String, default: Boolean): Boolean {

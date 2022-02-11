@@ -88,7 +88,17 @@ abstract class AbstractDictionaryProvider(dictionaryFiles: Set<File>) : Dictiona
 
         private fun word(lang: String, key: String): String {
             val dictionary = dictionaries[lang] ?: throw NoSuchLanguageException()
-            return dictionary.words[key] ?: throw NoSuchWordException()
+            var word = dictionary.words[key]
+            return if (word != null) {
+                word.content
+            } else {
+                word = dictionaries[defaultLanguage.code]!!.words[key]
+                if (word?.translatable == false) {
+                    word.content
+                } else {
+                    throw NoSuchWordException()
+                }
+            }
         }
 
     }

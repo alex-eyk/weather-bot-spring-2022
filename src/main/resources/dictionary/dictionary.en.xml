@@ -61,7 +61,10 @@ It must contain two elements - `replies` and `words`.
     -->
     <words>
         <!--
-        All words must be defined for each language used.
+        All words must be defined for each language used, unless there is nothing to translate, such as the degree sign.
+        In such a case, it is necessary to indicate, using the translatable attribute, that the word is not
+        translatable.
+        Non-translatable words can only be in the default dictionary file.
         For new line the character is used: `&#10`;
         -->
         <word key="word">word</word>
