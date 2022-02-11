@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val WEATHER_BASE_URL = ""
+private const val WEATHER_BASE_URL = "https://api.openweathermap.org/data/2.5/"
 
 @Configuration
 class WebConfig {

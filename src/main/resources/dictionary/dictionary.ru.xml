@@ -48,6 +48,8 @@ dictionary — корневой элемент
         -->
         <reply key="start">Добро пожаловать!</reply>
         <reply key="start_first_time">Добро пожаловать!</reply>
+        <reply key="weather" format="true">Температура: %.1f</reply>
+        <reply key="unable_to_get_weather">Не удалось получить текущий прогноз погоды, попробуйте повторить попытку чуть позже</reply>
     </replies>
 
     <!--
