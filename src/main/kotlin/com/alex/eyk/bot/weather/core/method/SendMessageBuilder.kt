@@ -17,21 +17,10 @@ class SendMessageBuilder {
 
     fun reply(reply: Reply): SendMessageBuilder {
         if (reply.format) {
-            throw IllegalStateException("This reply must be supplemented with arguments")
+            throw IllegalStateException("Unable to send reply because it hasn't been formatted")
         }
         this.markdown = reply.markdown
         this.builder.text(reply.content)
-        return this
-    }
-
-    fun reply(reply: Reply, vararg args: Any): SendMessageBuilder {
-        if (reply.format == false) {
-            throw IllegalStateException("This reply should not be format")
-        }
-        this.markdown = reply.markdown
-        this.builder.text(
-            reply.content.format(*args)
-        )
         return this
     }
 

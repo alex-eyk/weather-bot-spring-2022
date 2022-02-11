@@ -22,7 +22,7 @@ class DictionaryParser : AbstractXmlParser<Dictionary>() {
     override fun parse(file: File): Dictionary {
         val filename = file.name
         if (filename.matches(FILENAME_PATTERN) == false) {
-            throw IllegalStateException("Illegal file name: $filename. Right name: `dictionary.code.xml")
+            throw IllegalStateException("Illegal file name: `$filename`. Right name: `dictionary.lang-code-here.xml`")
         }
         this.languageCode = filename.substring(filename.indexOf(".") + 1, filename.lastIndexOf("."))
         return super.parse(file)

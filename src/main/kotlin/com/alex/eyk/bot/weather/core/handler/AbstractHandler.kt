@@ -1,7 +1,10 @@
 package com.alex.eyk.bot.weather.core.handler
 
 import com.alex.eyk.bot.weather.core.entity.user.User
+import com.alex.eyk.bot.weather.core.method.SendMessageBuilder
+import com.alex.eyk.dictionary.Reply
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Message
 
 abstract class AbstractHandler {
@@ -23,6 +26,13 @@ abstract class AbstractHandler {
 
     protected open fun notRegisteredHandle(message: Message): BotApiMethod<*> {
         throw NotImplementedError()
+    }
+
+    protected fun sendSimpleReply(user: User, reply: Reply): SendMessage {
+        return SendMessageBuilder()
+            .chat(user.chat)
+            .reply(reply)
+            .build()
     }
 
     fun buildTask(): TaskBuilder {

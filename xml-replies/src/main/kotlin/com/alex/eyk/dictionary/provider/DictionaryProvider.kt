@@ -5,12 +5,43 @@ import com.alex.eyk.dictionary.Reply
 
 interface DictionaryProvider {
 
-    fun word(lang: String, key: String): String
+    fun reply(): ReplyTransaction
 
-    fun reply(lang: String, key: String): Reply
+    fun word(): WordTransaction
 
     fun getDefaultLanguageCode(): String
 
     fun getLanguages(): List<Language>
+
+    abstract class DataTransaction<T> protected constructor() {
+
+        abstract fun get(): T
+
+    }
+
+    abstract class ReplyTransaction protected constructor() : DataTransaction<Reply>() {
+
+        protected lateinit var languageCode: String
+        protected lateinit var key: String
+        protected var args: Array<out Any>? = null
+
+        fun language(code: String) = apply { this.languageCode = code }
+
+        fun key(key: String) = apply { this.key = key }
+
+        fun args(vararg args: Any) = apply { this.args = args }
+
+    }
+
+    abstract class WordTransaction protected constructor() : DataTransaction<String>() {
+
+        protected lateinit var languageCode: String
+        protected lateinit var key: String
+
+        fun language(code: String) = apply { this.languageCode = code }
+
+        fun key(key: String) = apply { this.key = key }
+
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.alex.eyk.bot.weather.core.handler
 
+import com.alex.eyk.bot.weather.app.handler.StartHandler
 import com.alex.eyk.bot.weather.core.entity.Activity
 import com.alex.eyk.bot.weather.core.entity.user.User
 import com.alex.eyk.bot.weather.core.handler.command.CommandHandlerProvider
@@ -18,8 +19,8 @@ class HandlerProvider @Inject constructor(
 
     fun getHandler(user: User?, message: Message): AbstractHandler {
         return if (user == null) {
-            if (message.text == "/start") {
-                return commandHandlerProvider.byCommand("start")
+            if (message.text == "/" + StartHandler.COMMAND) {
+                return commandHandlerProvider.byCommand(StartHandler.COMMAND)
             } else {
                 throw IllegalStateException("User: ${message.chatId} not save in database")
             }

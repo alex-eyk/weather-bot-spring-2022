@@ -20,6 +20,9 @@ abstract class AbstractDictionaryProvider(dictionaryFiles: Set<File>) : Dictiona
         val mutableDictionaries = HashMap<String, Dictionary>()
         val mutableLanguages = ArrayList<Language>()
         for (file in dictionaryFiles) {
+            if (file.name.endsWith(".xsd")) {
+                continue
+            }
             val dictionary = DictionaryParser().parse(file)
             if (dictionary.default) {
                 if (::defaultLanguage.isInitialized) {
@@ -38,6 +41,14 @@ abstract class AbstractDictionaryProvider(dictionaryFiles: Set<File>) : Dictiona
         }
     }
 
+    override fun reply(): DictionaryProvider.ReplyTransaction {
+        return ReplyTransaction()
+    }
+
+    override fun word(): DictionaryProvider.WordTransaction {
+        return WordTransaction()
+    }
+
     override fun getLanguages(): List<Language> {
         return languages
     }
@@ -46,13 +57,39 @@ abstract class AbstractDictionaryProvider(dictionaryFiles: Set<File>) : Dictiona
         return defaultLanguage.code
     }
 
-    override fun reply(lang: String, key: String): Reply {
-        val dictionary = dictionaries[lang] ?: throw NoSuchLanguageException()
-        return dictionary.replies[key] ?: throw NoSuchReplyException()
+    inner class ReplyTransaction internal constructor() : DictionaryProvider.ReplyTransaction() {
+
+        override fun get(): Reply {
+            if (args == null) {
+                return reply(languageCode, key)
+            }
+            return reply(languageCode, key, *args!!)
+        }
+
+        private fun reply(lang: String, key: String): Reply {
+            val dictionary = dictionaries[lang] ?: throw NoSuchLanguageException()
+            return dictionary.replies[key] ?: throw NoSuchReplyException()
+        }
+
+        private fun reply(lang: String, key: String, vararg args: Any): Reply {
+            val sourceReply = reply(lang, key)
+            return Reply(
+                sourceReply.content.format(*args), format = false, sourceReply.markdown
+            )
+        }
+
     }
 
-    override fun word(lang: String, key: String): String {
-        val dictionary = dictionaries[lang] ?: throw NoSuchLanguageException()
-        return dictionary.words[key] ?: throw NoSuchWordException()
+    inner class WordTransaction internal constructor() : DictionaryProvider.WordTransaction() {
+
+        override fun get(): String {
+            return word(languageCode, key)
+        }
+
+        private fun word(lang: String, key: String): String {
+            val dictionary = dictionaries[lang] ?: throw NoSuchLanguageException()
+            return dictionary.words[key] ?: throw NoSuchWordException()
+        }
+
     }
 }

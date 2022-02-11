@@ -10,17 +10,23 @@ import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Message
 
-const val COMMAND = "start"
-
 @Service
 class StartHandler @Autowired constructor(
     private val dictProvider: DictionaryProvider,
     private val userRepository: UserRepository
 ) : CommandHandler(COMMAND) {
 
+    companion object {
+        const val COMMAND = "start"
+    }
+
     override fun saveHandle(user: User, message: Message): SendMessage {
         return super.sendSimpleReply(
-            user, dictProvider.reply(user.languageCode, Replies.START)
+            user,
+            dictProvider.reply()
+                .language(user.languageCode)
+                .key(Replies.START)
+                .get()
         )
     }
 
@@ -28,7 +34,11 @@ class StartHandler @Autowired constructor(
         val user = User(message.chatId.toLong(), dictProvider.getDefaultLanguageCode())
         userRepository.save(user)
         return super.sendSimpleReply(
-            user, dictProvider.reply(user.languageCode, Replies.START_FIRST_TIME)
+            user,
+            dictProvider.reply()
+                .language(user.languageCode)
+                .key(Replies.START_FIRST_TIME)
+                .get()
         )
     }
 
