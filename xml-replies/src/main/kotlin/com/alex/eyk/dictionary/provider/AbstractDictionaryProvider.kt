@@ -49,7 +49,7 @@ abstract class AbstractDictionaryProvider(dictionaryFiles: Set<File>) : Dictiona
         return WordTransaction()
     }
 
-    override fun getLanguages(): List<Language> {
+    override fun getSupportedLanguages(): List<Language> {
         return languages
     }
 

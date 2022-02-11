@@ -21,25 +21,40 @@ class StartHandler @Autowired constructor(
     }
 
     override fun saveHandle(user: User, message: Message): SendMessage {
-        return super.sendSimpleReply(
-            user,
-            dictProvider.reply()
-                .language(user.languageCode)
-                .key(Replies.START)
-                .get()
-        )
+        val greetingReply = dictProvider.reply()
+            .language(user.languageCode)
+            .key(Replies.START)
+            .get()
+        return super.sendSimpleReply(user, greetingReply)
     }
 
     override fun notRegisteredHandle(message: Message): SendMessage {
         val user = User(message.chatId.toLong(), dictProvider.getDefaultLanguageCode())
         userRepository.save(user)
-        return super.sendSimpleReply(
-            user,
-            dictProvider.reply()
-                .language(user.languageCode)
-                .key(Replies.START_FIRST_TIME)
-                .get()
-        )
+
+        val firstGreetingReply = dictProvider.reply()
+            .language(getLanguageByMessage(message))
+            .key(Replies.START_FIRST_TIME)
+            .get()
+        return super.sendSimpleReply(user, firstGreetingReply)
+    }
+
+    private fun getLanguageByMessage(message: Message): String {
+        val code = message.from.languageCode
+        return if (isSupportedLanguage(code)) {
+            code
+        } else {
+            dictProvider.getDefaultLanguageCode()
+        }
+    }
+
+    private fun isSupportedLanguage(code: String): Boolean {
+        for (lang in dictProvider.getSupportedLanguages()) {
+            if (lang.code == code) {
+                return true
+            }
+        }
+        return false
     }
 
 }

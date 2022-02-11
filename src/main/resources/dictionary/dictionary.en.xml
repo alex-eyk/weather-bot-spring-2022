@@ -4,8 +4,8 @@ The filename is "dictionary.en.xml", where "en" is language code.
 
 dictionary — root element
 Contains the following attributes:
-  default           — Indicates whether this language will be used by default. If true, then each user will receive
-                      a message in this language after registration.
+  default           — The 'default' language contains all non-translatable words, and will also be used if the user's
+                      language is not among the supported ones.
                       Boolean value. Required attribute.
 
   languageLocalName — Local language name in the corresponding language (example: `English` for code "en")
