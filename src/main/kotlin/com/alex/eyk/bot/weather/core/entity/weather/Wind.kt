@@ -1,4 +1,4 @@
-package com.alex.eyk.bot.weather.app.entity.weather
+package com.alex.eyk.bot.weather.core.entity.weather
 
 import com.google.gson.annotations.SerializedName
 

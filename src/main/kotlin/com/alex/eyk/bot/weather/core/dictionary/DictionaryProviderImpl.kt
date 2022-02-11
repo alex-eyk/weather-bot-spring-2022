@@ -1,4 +1,4 @@
-package com.alex.eyk.bot.weather.core.entity.reply.impl
+package com.alex.eyk.bot.weather.core.dictionary
 
 import com.alex.eyk.bot.weather.core.util.ResourceUtils
 import com.alex.eyk.dictionary.provider.AbstractDictionaryProvider

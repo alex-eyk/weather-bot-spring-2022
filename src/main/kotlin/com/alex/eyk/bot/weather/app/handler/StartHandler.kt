@@ -1,6 +1,6 @@
 package com.alex.eyk.bot.weather.app.handler
 
-import com.alex.eyk.bot.weather.core.entity.reply.impl.Replies
+import com.alex.eyk.bot.weather.core.dictionary.Replies
 import com.alex.eyk.bot.weather.core.entity.user.User
 import com.alex.eyk.bot.weather.core.entity.user.UserRepository
 import com.alex.eyk.bot.weather.core.handler.command.CommandHandler

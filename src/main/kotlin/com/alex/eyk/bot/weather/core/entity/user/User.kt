@@ -1,10 +1,8 @@
 package com.alex.eyk.bot.weather.core.entity.user
 
 import com.alex.eyk.bot.weather.core.entity.Activity
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import com.alex.eyk.bot.weather.core.entity.weather.Units
+import javax.persistence.*
 
 @Table(name = "`user`")
 @Entity
@@ -17,12 +15,15 @@ data class User(
     @Column(name = "`lang`", nullable = false)
     var languageCode: String,
 
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "`units`", nullable = false)
+    var units: Units = Units.METRIC,
+
     @Column(name = "`enabled`", nullable = false)
     var enabled: Boolean = true,
 
     @Column(name = "`activity`", nullable = false)
     var activity: Activity = Activity.NONE
-
 
 ) {
 

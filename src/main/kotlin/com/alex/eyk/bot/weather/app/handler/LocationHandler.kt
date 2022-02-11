@@ -1,8 +1,8 @@
 package com.alex.eyk.bot.weather.app.handler
 
-import com.alex.eyk.bot.weather.app.entity.weather.WeatherResponse
+import com.alex.eyk.bot.weather.core.entity.weather.WeatherResponse
 import com.alex.eyk.bot.weather.app.net.WeatherService
-import com.alex.eyk.bot.weather.core.entity.reply.impl.Replies
+import com.alex.eyk.bot.weather.core.dictionary.Replies
 import com.alex.eyk.bot.weather.core.entity.user.User
 import com.alex.eyk.bot.weather.core.handler.message.condition.ConditionMessageHandler
 import com.alex.eyk.dictionary.provider.DictionaryProvider
@@ -29,7 +29,7 @@ class LocationHandler(
     override fun saveHandle(user: User, message: Message): SendMessage {
         val location = message.location
         val request = weatherService
-            .weather(location.latitude, location.longitude, token)
+            .weather(location.latitude, location.longitude, token, user.units.unitName())
             .execute()
         if (request.isSuccessful) {
             return sendWeather(user, request.body()!!)
