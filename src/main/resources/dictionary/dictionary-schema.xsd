@@ -8,13 +8,22 @@
                         <xs:sequence>
                             <xs:element name="reply" minOccurs="0" maxOccurs="unbounded">
                                 <xs:complexType>
-                                    <xs:simpleContent>
+                                    <xs:complexContent>
                                         <xs:extension base="xs:string">
+                                            <xs:sequence>
+                                                <xs:element name="arg">
+                                                    <xs:complexType>
+                                                        <xs:attribute name="q" type="xs:string" use="required"/>
+                                                        <xs:attribute name="name" type="xs:string" use="required"/>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                                <xs:element name="br"/>
+                                            </xs:sequence>
                                             <xs:attribute name="key" type="xs:string" use="required"/>
                                             <xs:attribute name="format" type="xs:boolean" default="false"/>
                                             <xs:attribute name="markdown" type="xs:boolean" default="false"/>
                                         </xs:extension>
-                                    </xs:simpleContent>
+                                    </xs:complexContent>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>

@@ -63,7 +63,11 @@ abstract class AbstractDictionaryProvider(dictionaryFiles: Set<File>) : Dictiona
             if (args == null) {
                 return reply(languageCode, key)
             }
-            return reply(languageCode, key, *args!!)
+            try {
+                return reply(languageCode, key, *args!!)
+            } catch (e: Exception) {
+                throw IllegalStateException("Unable to parse reply with key: $key", e)
+            }
         }
 
         private fun reply(lang: String, key: String): Reply {

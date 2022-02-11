@@ -13,12 +13,18 @@ private const val ATTR_MARKDOWN = "markdown"
 
 private const val ATTR_TRANSLATABLE = "translatable"
 
+private const val ATTR_QUERY = "q"
+
 fun Attributes.getLanguageLocalName(): String {
     return getString(ATTR_LOCAL_NAME)
 }
 
 fun Attributes.getKey(): String {
     return getString(ATTR_KEY)
+}
+
+fun Attributes.getQuery(): String {
+    return getString(ATTR_QUERY)
 }
 
 fun Attributes.useCases(default: Boolean): Boolean {

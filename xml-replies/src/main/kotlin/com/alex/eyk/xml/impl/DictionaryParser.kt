@@ -72,6 +72,18 @@ class DictionaryParser : AbstractXmlParser<Dictionary>() {
                     this.key = attributes.getKey()
                     this.translatable = attributes.isTranslatable(default = translatable)
                 }
+                "arg" -> {
+                    if (this.content == null) {
+                        this.content = ""
+                    }
+                    this.content += attributes.getQuery()
+                }
+                "br" -> {
+                    if (this.content == null) {
+                        this.content = ""
+                    }
+                    this.content += "\n"
+                }
             }
         }
 
@@ -79,6 +91,7 @@ class DictionaryParser : AbstractXmlParser<Dictionary>() {
             if (this.key != null) {
                 val read = String(ch, start, length)
                     .replace(" {2,}".toRegex(), "")
+                    .replace("\n", "")
                 if (this.content != null) {
                     this.content += read
                 } else {
@@ -116,8 +129,10 @@ class DictionaryParser : AbstractXmlParser<Dictionary>() {
                     this.translatable = TRANSLATABLE_DEFAULT
                 }
             }
-            this.key = null
-            this.content = null
+            if (qName != "arg" && qName != "br") {
+                this.key = null
+                this.content = null
+            }
         }
 
         override fun endDocument() {

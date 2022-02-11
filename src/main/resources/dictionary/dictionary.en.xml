@@ -31,8 +31,9 @@ It must contain two elements - `replies` and `words`.
                  String value. Required attribute.
 
       format   - Does the content require formatting, i.e. Does it need to be supplemented with some additional
-                 parameters. It is implemented in the code via String.format, so the same rules are used in this
-                 document: %s is a string, %d is a number, and so on...
+                 parameters. Parameters are set using the <args/> element inside the <reply>. It has attributes
+                 q - a condition for String.format, for example `%s`, `%d` or `%.1f`, and name - the name of the
+                 parameter.
                  Boolean value. Optional attribute, default value is false.
 
       markdown — Whether the string was written using the Markdown language for further formatting.
