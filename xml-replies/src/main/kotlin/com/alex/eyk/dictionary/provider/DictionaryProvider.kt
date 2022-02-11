@@ -35,7 +35,7 @@ interface DictionaryProvider {
 
     abstract class WordTransaction protected constructor() : DataTransaction<String>() {
 
-        protected lateinit var languageCode: String
+        protected var languageCode: String? = null
         protected lateinit var key: String
 
         fun language(code: String) = apply { this.languageCode = code }

@@ -86,17 +86,18 @@ abstract class AbstractDictionaryProvider(dictionaryFiles: Set<File>) : Dictiona
             return word(languageCode, key)
         }
 
-        private fun word(lang: String, key: String): String {
-            val dictionary = dictionaries[lang] ?: throw NoSuchLanguageException()
-            var word = dictionary.words[key]
-            return if (word != null) {
-                word.content
+        private fun word(lang: String?, key: String): String {
+            return if (lang != null) {
+                val dictionary = dictionaries[lang] ?: throw NoSuchLanguageException()
+                dictionary.words[key]?.content ?: throw NoSuchWordException(
+                    "Unable to find word with key: $key"
+                )
             } else {
-                word = dictionaries[defaultLanguage.code]!!.words[key]
+                val word = dictionaries[defaultLanguage.code]!!.words[key]
                 if (word?.translatable == false) {
                     word.content
                 } else {
-                    throw NoSuchWordException()
+                    throw NoSuchWordException("Unable to find word with key: $key (language was not set)")
                 }
             }
         }

@@ -1,5 +1,3 @@
 package com.alex.eyk.dictionary.exception
 
-class NoSuchWordException : Throwable() {
-
-}
+class NoSuchWordException(message: String) : Throwable(message)
