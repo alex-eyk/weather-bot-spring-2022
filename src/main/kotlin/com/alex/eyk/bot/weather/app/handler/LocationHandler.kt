@@ -1,13 +1,10 @@
 package com.alex.eyk.bot.weather.app.handler
 
-import com.alex.eyk.bot.weather.core.entity.weather.WeatherResponse
 import com.alex.eyk.bot.weather.app.net.WeatherService
 import com.alex.eyk.bot.weather.core.dictionary.Replies
 import com.alex.eyk.bot.weather.core.dictionary.Words
 import com.alex.eyk.bot.weather.core.entity.user.User
-import com.alex.eyk.bot.weather.core.entity.weather.Units
-import com.alex.eyk.bot.weather.core.entity.weather.Wind
-import com.alex.eyk.bot.weather.core.entity.weather.WindDirection
+import com.alex.eyk.bot.weather.core.entity.weather.*
 import com.alex.eyk.bot.weather.core.handler.message.condition.ConditionMessageHandler
 import com.alex.eyk.dictionary.provider.DictionaryProvider
 import org.springframework.beans.factory.annotation.Value
@@ -34,7 +31,13 @@ class LocationHandler(
     override fun saveHandle(user: User, message: Message): SendMessage {
         val location = message.location
         val request = weatherService
-            .weather(location.latitude, location.longitude, token, user.units.unitName())
+            .weather(
+                location.latitude,
+                location.longitude,
+                token,
+                user.units.unitName(),
+                user.languageCode
+            )
             .execute()
         if (request.isSuccessful) {
             return sendWeather(user, request.body()!!)
@@ -54,6 +57,7 @@ class LocationHandler(
         val args = WeatherArgsBuilder()
             .realTemperature(weather.temperature.real)
             .degreeSign(getDegreeSign(user))
+            .description(getWeatherDescription(weather.weatherList))
             .windDirection(getWindDirection(user, weather.wind))
             .windSpeed(weather.wind.speed)
             .speedDimension(getSpeedDimension(user))
@@ -98,10 +102,22 @@ class LocationHandler(
             .get()
     }
 
+    private fun getWeatherDescription(weatherList: List<Weather>): String {
+        val descriptionBuilder = StringBuilder()
+        for (weather in weatherList) {
+            descriptionBuilder.append(weather.description)
+                .append(", ")
+        }
+        val length = descriptionBuilder.length
+        return descriptionBuilder.delete(length - 2, length)
+            .toString()
+    }
+
     class WeatherArgsBuilder {
 
         private var realTemperature by Delegates.notNull<Float>()
         private lateinit var degreeSign: String
+        private lateinit var description: String
         private lateinit var windDirection: String
         private var windSpeed by Delegates.notNull<Float>()
         private lateinit var speedDimension: String
@@ -110,6 +126,8 @@ class LocationHandler(
 
         fun degreeSign(sign: String) = apply { this.degreeSign = sign }
 
+        fun description(description: String) = apply { this.description = description }
+
         fun windDirection(direction: String) = apply { this.windDirection = direction }
 
         fun windSpeed(speed: Float) = apply { this.windSpeed = speed }
@@ -117,7 +135,7 @@ class LocationHandler(
         fun speedDimension(dimension: String) = apply { this.speedDimension = dimension }
 
         fun build(): Array<out Any> {
-            return arrayOf(realTemperature, degreeSign, windDirection, windSpeed, speedDimension)
+            return arrayOf(realTemperature, degreeSign, description, windDirection, windSpeed, speedDimension)
         }
     }
 }

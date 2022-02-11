@@ -78,6 +78,7 @@ class DictionaryParser : AbstractXmlParser<Dictionary>() {
         override fun characters(ch: CharArray, start: Int, length: Int) {
             if (this.key != null) {
                 val read = String(ch, start, length)
+                    .replace(" {2,}".toRegex(), "")
                 if (this.content != null) {
                     this.content += read
                 } else {
