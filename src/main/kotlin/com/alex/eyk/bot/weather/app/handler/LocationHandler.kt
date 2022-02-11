@@ -57,6 +57,7 @@ class LocationHandler(
         val args = WeatherArgsBuilder()
             .realTemperature(weather.temperature.real)
             .degreeSign(getDegreeSign(user))
+            .feelsTemp(weather.temperature.feelsLike)
             .description(getWeatherDescription(weather.weatherList))
             .windDirection(getWindDirection(user, weather.wind))
             .windSpeed(weather.wind.speed)
@@ -117,6 +118,7 @@ class LocationHandler(
 
         private var realTemperature by Delegates.notNull<Float>()
         private lateinit var degreeSign: String
+        private var feelsTemp by Delegates.notNull<Float>()
         private lateinit var description: String
         private lateinit var windDirection: String
         private var windSpeed by Delegates.notNull<Float>()
@@ -125,6 +127,8 @@ class LocationHandler(
         fun realTemperature(temp: Float) = apply { this.realTemperature = temp }
 
         fun degreeSign(sign: String) = apply { this.degreeSign = sign }
+
+        fun feelsTemp(temp: Float) = apply { this.feelsTemp = temp }
 
         fun description(description: String) = apply { this.description = description }
 
@@ -135,7 +139,9 @@ class LocationHandler(
         fun speedDimension(dimension: String) = apply { this.speedDimension = dimension }
 
         fun build(): Array<out Any> {
-            return arrayOf(realTemperature, degreeSign, description, windDirection, windSpeed, speedDimension)
+            return arrayOf(
+                realTemperature, degreeSign, feelsTemp, degreeSign, description, windDirection, windSpeed, speedDimension
+            )
         }
     }
 }
