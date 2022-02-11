@@ -55,6 +55,8 @@ class LocationHandler(
             .realTemperature(weather.temperature.real)
             .degreeSign(getDegreeSign(user))
             .windDirection(getWindDirection(user, weather.wind))
+            .windSpeed(weather.wind.speed)
+            .speedDimension(getSpeedDimension(user))
             .build()
         val weatherReply = dictProvider.reply()
             .language(user.languageCode)
@@ -83,11 +85,26 @@ class LocationHandler(
             .get()
     }
 
+    private fun getSpeedDimension(user: User): String {
+        val key =
+            if (user.units == Units.METRIC || user.units == Units.STANDARD) {
+                Words.METERS_PER_SECOND
+            } else {
+                Words.MILES_PER_SECOND
+            }
+        return dictProvider.word()
+            .language(user.languageCode)
+            .key(key)
+            .get()
+    }
+
     class WeatherArgsBuilder {
 
         private var realTemperature by Delegates.notNull<Float>()
         private lateinit var degreeSign: String
         private lateinit var windDirection: String
+        private var windSpeed by Delegates.notNull<Float>()
+        private lateinit var speedDimension: String
 
         fun realTemperature(temp: Float) = apply { this.realTemperature = temp }
 
@@ -95,8 +112,12 @@ class LocationHandler(
 
         fun windDirection(direction: String) = apply { this.windDirection = direction }
 
+        fun windSpeed(speed: Float) = apply { this.windSpeed = speed }
+
+        fun speedDimension(dimension: String) = apply { this.speedDimension = dimension }
+
         fun build(): Array<out Any> {
-            return arrayOf(realTemperature, degreeSign, windDirection)
+            return arrayOf(realTemperature, degreeSign, windDirection, windSpeed, speedDimension)
         }
     }
 }

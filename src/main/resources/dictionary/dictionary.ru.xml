@@ -48,7 +48,7 @@ dictionary — корневой элемент
         -->
         <reply key="start">Добро пожаловать!</reply>
         <reply key="start_first_time">Добро пожаловать!</reply>
-        <reply key="weather" format="true">Привет! Температура на данный момент — %.1f%s. Ветер %s.</reply>
+        <reply key="weather" format="true">Привет! Температура на данный момент — %.1f%s. Ветер %s, %.1f %s</reply>
         <reply key="unable_to_get_weather">Не удалось получить текущий прогноз погоды, попробуйте повторить попытку чуть позже</reply>
     </replies>
 
@@ -74,6 +74,9 @@ dictionary — корневой элемент
         <word key="celsius" translatable="false">℃</word>
         <word key="fahrenheit" translatable="false">℉</word>
         <word key="kelvin" translatable="false">K</word>
+
+        <word key="meters_per_second">м/с</word>
+        <word key="miles_per_second">миль/с</word>
 
         <word key="north">северный</word>
         <word key="north_east">северо-восточный</word>
