@@ -5,6 +5,7 @@ import com.alex.eyk.dictionary.Language
 import com.alex.eyk.dictionary.Reply
 import com.alex.eyk.dictionary.Word
 import com.alex.eyk.xml.AbstractXmlParser
+import com.alex.eyk.xml.attrs.*
 import org.xml.sax.Attributes
 import java.io.File
 
