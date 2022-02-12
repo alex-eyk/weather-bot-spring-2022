@@ -4,6 +4,7 @@ import com.alex.eyk.bot.weather.app.net.WeatherService
 import com.alex.eyk.bot.weather.core.entity.user.User
 import com.alex.eyk.bot.weather.core.entity.weather.*
 import com.alex.eyk.bot.weather.core.handler.message.condition.ConditionMessageHandler
+import com.alex.eyk.dictionary.builder.WeatherArgumentsBuilder
 import com.alex.eyk.dictionary.keys.Replies
 import com.alex.eyk.dictionary.keys.Words
 import com.alex.eyk.dictionary.provider.DictionaryProvider
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Message
-import kotlin.properties.Delegates
 
 @Service
 class LocationHandler(
@@ -40,7 +40,7 @@ class LocationHandler(
             )
             .execute()
         if (request.isSuccessful) {
-            return sendWeather(user, request.body()!!)
+            return sendWeather(user, request.body())
         }
         return sendErrorReply(user)
     }
@@ -54,13 +54,13 @@ class LocationHandler(
     }
 
     private fun sendWeather(user: User, weather: WeatherResponse): SendMessage {
-        val args = WeatherArgsBuilder()
-            .realTemperature(weather.temperature.real)
-            .degreeSign(getDegreeSign(user))
+        val args = WeatherArgumentsBuilder()
+            .realTemp(weather.temperature.real)
+            .tempSign(getDegreeSign(user))
             .feelsTemp(weather.temperature.feelsLike)
             .description(getWeatherDescription(weather.weatherList))
-            .windDirection(getWindDirection(user, weather.wind))
-            .windSpeed(weather.wind.speed)
+            .direction(getWindDirection(user, weather.wind))
+            .speed(weather.wind.speed)
             .speedDimension(getSpeedDimension(user))
             .build()
         val weatherReply = dictProvider.reply()
@@ -114,34 +114,4 @@ class LocationHandler(
             .toString()
     }
 
-    class WeatherArgsBuilder {
-
-        private var realTemperature by Delegates.notNull<Float>()
-        private lateinit var degreeSign: String
-        private var feelsTemp by Delegates.notNull<Float>()
-        private lateinit var description: String
-        private lateinit var windDirection: String
-        private var windSpeed by Delegates.notNull<Float>()
-        private lateinit var speedDimension: String
-
-        fun realTemperature(temp: Float) = apply { this.realTemperature = temp }
-
-        fun degreeSign(sign: String) = apply { this.degreeSign = sign }
-
-        fun feelsTemp(temp: Float) = apply { this.feelsTemp = temp }
-
-        fun description(description: String) = apply { this.description = description }
-
-        fun windDirection(direction: String) = apply { this.windDirection = direction }
-
-        fun windSpeed(speed: Float) = apply { this.windSpeed = speed }
-
-        fun speedDimension(dimension: String) = apply { this.speedDimension = dimension }
-
-        fun build(): Array<out Any> {
-            return arrayOf(
-                realTemperature, degreeSign, feelsTemp, degreeSign, description, windDirection, windSpeed, speedDimension
-            )
-        }
-    }
 }
