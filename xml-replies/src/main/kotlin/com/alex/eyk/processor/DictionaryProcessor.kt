@@ -25,6 +25,7 @@ class DictionaryProcessor : AbstractProcessor() {
 
     companion object {
         private const val KAPT_KOTLIN_GENERATED_OPTION_NAME = "kapt.kotlin.generated"
+        private const val ARGS_BUILDER_SUFFIX = "ArgumentsBuilder"
         private const val BUILDER_PACKAGE = "com.alex.eyk.dictionary.builder"
         private const val KEYS_PACKAGE = "com.alex.eyk.dictionary.keys"
     }
@@ -37,7 +38,7 @@ class DictionaryProcessor : AbstractProcessor() {
     }
 
     override fun getSupportedAnnotationTypes(): MutableSet<String> {
-        return mutableSetOf()
+        return mutableSetOf("*")
     }
 
     override fun process(
@@ -76,7 +77,7 @@ class DictionaryProcessor : AbstractProcessor() {
         val replyArgsMap = ArgumentsParser().parse(defaultDictionaryFile)
         val generator: TypeGenerator<List<Argument>> = ArgsBuilderGenerator()
         for (arg in replyArgsMap) {
-            val typeSpec = generator.generate(arg.key + "Builder", arg.value)
+            val typeSpec = generator.generate(arg.key + ARGS_BUILDER_SUFFIX, arg.value)
             val fileSpec = createFileSpec(BUILDER_PACKAGE, typeSpec)
             fileSpec.writeTo(File(generatedDir))
         }
