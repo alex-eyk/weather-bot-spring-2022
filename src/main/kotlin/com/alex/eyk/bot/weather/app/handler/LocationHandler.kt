@@ -1,11 +1,11 @@
 package com.alex.eyk.bot.weather.app.handler
 
 import com.alex.eyk.bot.weather.app.net.WeatherService
-import com.alex.eyk.bot.weather.core.dictionary.Replies
-import com.alex.eyk.bot.weather.core.dictionary.Words
 import com.alex.eyk.bot.weather.core.entity.user.User
 import com.alex.eyk.bot.weather.core.entity.weather.*
 import com.alex.eyk.bot.weather.core.handler.message.condition.ConditionMessageHandler
+import com.alex.eyk.dictionary.keys.Replies
+import com.alex.eyk.dictionary.keys.Words
 import com.alex.eyk.dictionary.provider.DictionaryProvider
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service

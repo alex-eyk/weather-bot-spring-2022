@@ -7,7 +7,7 @@ import com.ximand.properties.Property
 class ProcessorProperties {
 
     @Property(name = "dictionary.directory_path", defaultValue = "")
-    lateinit var dictionariesDirectoryPath: String
+    lateinit var dictionariesPath: String
 
     @Property(name = "generated.replies.filename", defaultValue = "Replies")
     lateinit var generatedReplyFilename: String
