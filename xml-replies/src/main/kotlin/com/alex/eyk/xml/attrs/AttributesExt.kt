@@ -1,4 +1,4 @@
-package com.alex.eyk.xml.impl
+package com.alex.eyk.xml.attrs
 
 import org.xml.sax.Attributes
 
@@ -47,7 +47,7 @@ fun Attributes.isTranslatable(default: Boolean): Boolean {
     return getBoolean(ATTR_TRANSLATABLE, default)
 }
 
-private fun Attributes.getBoolean(key: String, default: Boolean): Boolean {
+fun Attributes.getBoolean(key: String, default: Boolean): Boolean {
     val value = this.getValue(key) ?: return default
     try {
         return value.toBooleanStrict()
@@ -58,7 +58,7 @@ private fun Attributes.getBoolean(key: String, default: Boolean): Boolean {
     }
 }
 
-private fun Attributes.getString(key: String): String {
+fun Attributes.getString(key: String): String {
     val value = this.getValue(key)
     if (value != null) {
         return value
