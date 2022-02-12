@@ -1,4 +1,4 @@
-package com.alex.eyk.processor.generate
+package com.alex.eyk.processor.generator
 
 import com.alex.eyk.processor.Argument
 import com.alex.eyk.util.CaseUtils
@@ -6,11 +6,9 @@ import com.alex.eyk.util.removeLastChars
 import com.squareup.kotlinpoet.*
 import kotlin.reflect.KClass
 
-class ArgsBuilderGenerator : FileGenerator<List<Argument>> {
+class ArgsBuilderGenerator : TypeGenerator<List<Argument>> {
 
     companion object {
-
-        private const val BUILDER_PACKAGE = "com.alex.eyk.dictionary.builder"
 
         private val argToTypeMap = mapOf(
             Pair('s', String::class),
@@ -22,9 +20,8 @@ class ArgsBuilderGenerator : FileGenerator<List<Argument>> {
 
     private val consideredArgs: MutableSet<String> = HashSet()
 
-    override fun generate(name: String, data: List<Argument>): FileSpec {
-        val type = createTypeSpec(name, data)
-        return createFileSpec(type)
+    override fun generate(name: String, data: List<Argument>): TypeSpec {
+        return createTypeSpec(name, data)
     }
 
     private fun createTypeSpec(
@@ -66,13 +63,6 @@ class ArgsBuilderGenerator : FileGenerator<List<Argument>> {
         return FunSpec.builder("build")
             .returns(Array<out Any>::class)
             .addStatement("return arrayOf(%L)", makeArgsLine(args))
-            .build()
-    }
-
-    private fun createFileSpec(typeSpec: TypeSpec): FileSpec {
-        return FileSpec
-            .builder(BUILDER_PACKAGE, typeSpec.name!!)
-            .addType(typeSpec)
             .build()
     }
 
