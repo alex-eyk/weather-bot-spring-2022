@@ -4,6 +4,7 @@ import com.alex.eyk.processor.Argument
 import com.alex.eyk.util.CaseUtils
 import com.alex.eyk.util.removeLastChars
 import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import kotlin.reflect.KClass
 
 class ArgsBuilderGenerator : TypeGenerator<List<Argument>> {
@@ -19,6 +20,9 @@ class ArgsBuilderGenerator : TypeGenerator<List<Argument>> {
     }
 
     private val consideredArgs: MutableSet<String> = HashSet()
+
+    private val delegatesObject = ClassName("kotlin.properties", "Delegates")
+    private val parameterizedArray = Array::class.asClassName().parameterizedBy(Any::class.asClassName())
 
     override fun generate(name: String, data: List<Argument>): TypeSpec {
         return createTypeSpec(name, data)
@@ -46,7 +50,8 @@ class ArgsBuilderGenerator : TypeGenerator<List<Argument>> {
         val argumentType = getArgumentType(arg)
         return PropertySpec
             .builder(arg.propertyName(), argumentType)
-            .delegate(CodeBlock.of("Delegates.notNull<%T>()", argumentType))
+            .mutable(true)
+            .delegate(CodeBlock.of("%T.notNull<%T>()", delegatesObject, argumentType))
             .addModifiers(KModifier.PRIVATE)
             .build()
     }
@@ -54,14 +59,14 @@ class ArgsBuilderGenerator : TypeGenerator<List<Argument>> {
     private fun makeSetFunSpec(arg: Argument): FunSpec {
         return FunSpec.builder(arg.propertyName())
             .addParameter("value", getArgumentType(arg))
-            .addStatement("apply { this.%L = value }", arg.propertyName())
+            .addStatement("return apply { this.%L = value }", arg.propertyName())
             .build()
 
     }
 
     private fun makeBuildFunction(args: List<Argument>): FunSpec {
         return FunSpec.builder("build")
-            .returns(Array<out Any>::class)
+            .returns(parameterizedArray)
             .addStatement("return arrayOf(%L)", makeArgsLine(args))
             .build()
     }
