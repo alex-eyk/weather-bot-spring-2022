@@ -1,12 +1,12 @@
-package com.alex.eyk.processor
+package com.alex.eyk.processor.generate
 
+import com.alex.eyk.processor.Argument
 import com.alex.eyk.util.CaseUtils
 import com.alex.eyk.util.removeLastChars
 import com.squareup.kotlinpoet.*
-import java.io.File
 import kotlin.reflect.KClass
 
-class ArgsBuilder {
+class ArgsBuilderGenerator : FileGenerator<List<Argument>> {
 
     companion object {
 
@@ -17,18 +17,14 @@ class ArgsBuilder {
             Pair('d', Int::class),
             Pair('f', Float::class)
         )
+
     }
 
     private val consideredArgs: MutableSet<String> = HashSet()
 
-    fun generateArgBuilders(
-        repliesArgs: Map<String, List<Argument>>, generatedFilesDir: String
-    ) {
-        for (argsEntry in repliesArgs) {
-            val type = createTypeSpec(argsEntry.key, argsEntry.value)
-            val fileSpec = createFileSpec(type)
-            fileSpec.writeTo(File(generatedFilesDir))
-        }
+    override fun generate(name: String, data: List<Argument>): FileSpec {
+        val type = createTypeSpec(name, data)
+        return createFileSpec(type)
     }
 
     private fun createTypeSpec(
@@ -43,7 +39,6 @@ class ArgsBuilder {
                 .addProperty(makePropertySpec(arg))
                 .addFunction(makeSetFunSpec(arg))
             consideredArgs.add(arg.name)
-
         }
         return classBuilder
             .addFunction(makeBuildFunction(args))
@@ -110,4 +105,5 @@ class ArgsBuilder {
     private fun String.className(): String {
         return CaseUtils.convertSnakeCaseToClassName(this)
     }
+
 }
