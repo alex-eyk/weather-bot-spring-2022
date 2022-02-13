@@ -40,7 +40,7 @@ class LocationHandler(
             )
             .execute()
         if (request.isSuccessful) {
-            return sendWeather(user, request.body())
+            return sendWeather(user, request.body()!!)
         }
         return sendErrorReply(user)
     }
