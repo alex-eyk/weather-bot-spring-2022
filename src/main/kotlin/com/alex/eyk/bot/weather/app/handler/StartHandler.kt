@@ -49,12 +49,7 @@ class StartHandler @Autowired constructor(
     }
 
     private fun isSupportedLanguage(code: String): Boolean {
-        for (lang in dictProvider.getSupportedLanguages()) {
-            if (lang.code == code) {
-                return true
-            }
-        }
-        return false
+        return dictProvider.getSupportedLanguages().containsKey(code)
     }
 
 }

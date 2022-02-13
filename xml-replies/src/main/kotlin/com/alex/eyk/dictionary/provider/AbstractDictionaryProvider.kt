@@ -12,13 +12,13 @@ import java.io.File
 abstract class AbstractDictionaryProvider(dictionaryFiles: Set<File>) : DictionaryProvider {
 
     private val dictionaries: Map<String, Dictionary>
-    private val languages: List<Language>
+    private val languages: Map<String, Language>
 
     private lateinit var defaultLanguage: Language
 
     init {
         val mutableDictionaries = HashMap<String, Dictionary>()
-        val mutableLanguages = ArrayList<Language>()
+        val mutableLanguages = HashMap<String, Language>()
         for (file in dictionaryFiles) {
             if (file.name.endsWith(".xsd")) {
                 continue
@@ -30,7 +30,7 @@ abstract class AbstractDictionaryProvider(dictionaryFiles: Set<File>) : Dictiona
                 }
                 this.defaultLanguage = dictionary.language
             }
-            mutableLanguages.add(dictionary.language)
+            mutableLanguages[dictionary.language.code] = dictionary.language
             mutableDictionaries[dictionary.language.code] = dictionary
         }
         this.languages = mutableLanguages
@@ -49,7 +49,7 @@ abstract class AbstractDictionaryProvider(dictionaryFiles: Set<File>) : Dictiona
         return WordTransaction()
     }
 
-    override fun getSupportedLanguages(): List<Language> {
+    override fun getSupportedLanguages(): Map<String, Language> {
         return languages
     }
 

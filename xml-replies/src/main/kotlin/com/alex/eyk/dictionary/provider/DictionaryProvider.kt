@@ -11,7 +11,7 @@ interface DictionaryProvider {
 
     fun getDefaultLanguageCode(): String
 
-    fun getSupportedLanguages(): List<Language>
+    fun getSupportedLanguages(): Map<String, Language>
 
     abstract class DataTransaction<T> protected constructor() {
 
