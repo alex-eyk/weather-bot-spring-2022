@@ -48,6 +48,12 @@ dictionary — корневой элемент
         <reply key="start" markdown="true">*Добро пожаловать!*<br/>Чтобы узнать текущую погоду, отправь в этот чат интересующую тебя геопозицию.</reply>
         <reply key="start_first_time" markdown="true">*Добро пожаловать!*<br/>Чтобы узнать текущую погоду, отправь в этот чат интересующую тебя геопозицию.</reply>
 
+        <reply key="select_lang" format="true" markdown="true">
+            Выберите язык среди поддерживаемых.<br/>На данный момент к ним относятся:<br/>*<arg q="%s" name="supported_langs"/>*<br/>В ответ напишите код необходимо вам языка.<br/>_In response, write the code of the language you need_
+        </reply>
+        <reply key="lang_selected">Язык успешно изменен</reply>
+        <reply key="lang_not_found">Язык не найден. Попробуйте повторить попытку</reply>
+
         <reply key="weather" format="true">
             Привет! Температура на данный момент — <arg q="%.1f" name="real_temp"/><arg q="%s" name="temp_sign"/> (ощущается как <arg q="%.1f" name="feels_temp"/><arg q="%s" name="temp_sign"/>), <arg q="%s" name="description"/>, ветер <arg q="%s" name="direction"/>, <arg q="%.1f" name="speed"/> <arg q="%s" name="speed_dimension"/>.
         </reply>
