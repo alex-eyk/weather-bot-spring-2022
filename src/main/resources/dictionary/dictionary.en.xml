@@ -47,6 +47,12 @@ It must contain two elements - `replies` and `words`.
         -->
         <reply key="start">Welcome!</reply>
         <reply key="start_first_time">Welcome!</reply>
+
+        <reply key="weather" format="true">
+            Hello! Current temperature — <arg q="%.1f" name="real_temp"/><arg q="%s" name="temp_sign"/> (feels like <arg q="%.1f" name="feels_temp"/><arg q="%s" name="temp_sign"/>), <arg q="%s" name="description"/>, <arg q="%s" name="direction"/> wind, <arg q="%.1f" name="speed"/> <arg q="%s" name="speed_dimension"/>.
+        </reply>
+        <reply key="unable_to_get_weather">Failed to get current weather forecast, please try again later</reply>
+
     </replies>
 
     <!--
@@ -68,7 +74,18 @@ It must contain two elements - `replies` and `words`.
         Non-translatable words can only be in the default dictionary file.
         For new line use <br/>
         -->
-        <word key="word">word</word>
+        <word key="meters_per_second">m/s</word>
+        <word key="miles_per_second">miles/s</word>
+
+        <word key="north">north</word>
+        <word key="north_east">northeast</word>
+        <word key="east">eastern</word>
+        <word key="south_east">southeast</word>
+        <word key="south">south</word>
+        <word key="south_west">southwest</word>
+        <word key="west">west</word>
+        <word key="north_west">northwestern</word>
+
     </words>
 
 </dictionary>

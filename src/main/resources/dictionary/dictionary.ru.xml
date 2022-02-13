@@ -45,13 +45,13 @@ dictionary — корневой элемент
         Все ответы должны быть определены для каждого используемого языка.
         Для перехода на новую строку используйте <br/>.
         -->
-        <reply key="start">Добро пожаловать!</reply>
-        <reply key="start_first_time">Добро пожаловать!</reply>
+        <reply key="start" markdown="true">*Добро пожаловать!*<br/>Чтобы узнать текущую погоду, отправь в этот чат интересующую тебя геопозицию.</reply>
+        <reply key="start_first_time" markdown="true">*Добро пожаловать!*<br/>Чтобы узнать текущую погоду, отправь в этот чат интересующую тебя геопозицию.</reply>
 
         <reply key="weather" format="true">
             Привет! Температура на данный момент — <arg q="%.1f" name="real_temp"/><arg q="%s" name="temp_sign"/> (ощущается как <arg q="%.1f" name="feels_temp"/><arg q="%s" name="temp_sign"/>), <arg q="%s" name="description"/>, ветер <arg q="%s" name="direction"/>, <arg q="%.1f" name="speed"/> <arg q="%s" name="speed_dimension"/>.
         </reply>
-        <reply key="unable_to_get_weather">Не удалось получить текущий прогноз погоды, попробуйте повторить попытку чуть позже</reply>
+        <reply key="unable_to_get_weather">Не удалось получить текущий прогноз погоды<br/>Попробуйте повторить попытку чуть позже</reply>
 
     </replies>
 
